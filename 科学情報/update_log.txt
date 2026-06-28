@@ -1,0 +1,84 @@
+[2026-06-28 18:15:18] === Cosmos update: morning edition ===
+[2026-06-28 18:15:19] Fetching RSS feeds...
+[2026-06-28 18:15:19]     space ← www.nasa.gov: 8 entries
+[2026-06-28 18:15:20]     space ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:21]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:21]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:21]     ai ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:22]     ai ← www.technologyreview.com: 8 entries
+[2026-06-28 18:15:22]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:15:23]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:15:24]     bio ← www.nature.com: 8 entries
+[2026-06-28 18:15:25]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:26]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:15:26] Generating articles with Claude...
+[2026-06-28 18:15:26]   [space] NASA Announces Winners for 2026 Human Lander Challenge...
+[2026-06-28 18:15:26]     Generation error: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CcVQPnaXBpQV5BjqB3TG9'}
+[2026-06-28 18:15:26]     FAILED — skipping
+[2026-06-28 18:15:26]   [quantum] NASA’s Cold Atom Lab is creating one of the weirdest fo...
+[2026-06-28 18:15:26]     Generation error: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CcVQPoPPSugdeEBPPrZNi'}
+[2026-06-28 18:15:26]     FAILED — skipping
+[2026-06-28 18:15:26]   [ai] SpaceX wants to build AI data centers in space. Will it...
+[2026-06-28 18:15:27]     Generation error: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CcVQPpKhEJDmXAVuNW9FW'}
+[2026-06-28 18:15:27]     FAILED — skipping
+[2026-06-28 18:15:27]   [bio] Adaptive brain stimulation 2.0 for Parkinsonian gait...
+[2026-06-28 18:15:27]     Generation error: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CcVQPqD2FEyepV8E2kNWG'}
+[2026-06-28 18:15:27]     FAILED — skipping
+[2026-06-28 18:15:27]   [earth] Scientists open a million-year-old time capsule hidden ...
+[2026-06-28 18:15:27]     Generation error: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'message': 'invalid x-api-key'}, 'request_id': 'req_011CcVQPr8b51uwqbuuLohJU'}
+[2026-06-28 18:15:27]     FAILED — skipping
+[2026-06-28 18:15:27] ERROR: Only 0/5 articles generated. Keeping existing content.
+[2026-06-28 18:21:21] === Cosmos update: morning edition ===
+[2026-06-28 18:21:21] Fetching RSS feeds...
+[2026-06-28 18:21:21]     space ← www.nasa.gov: 8 entries
+[2026-06-28 18:21:22]     space ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:23]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:23]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:24]     ai ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:24]     ai ← www.technologyreview.com: 8 entries
+[2026-06-28 18:21:25]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:21:25]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:21:27]     bio ← www.nature.com: 8 entries
+[2026-06-28 18:21:28]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:28]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:21:28] Generating articles with Claude...
+[2026-06-28 18:21:28]   [space] NASA Announces Winners for 2026 Human Lander Challenge...
+[2026-06-28 18:21:39]     OK: NASA Announces Winners of 2026 Human Lander Challenge f
+[2026-06-28 18:21:39]   [quantum] NASA’s Cold Atom Lab is creating one of the weirdest fo...
+[2026-06-28 18:21:49]     OK: NASA's Cold Atom Lab Creates One of the Weirdest Forms 
+[2026-06-28 18:21:49]   [ai] SpaceX wants to build AI data centers in space. Will it...
+[2026-06-28 18:22:03]     OK: SpaceX Pursues Ambitious Plan to Build AI Data Centers 
+[2026-06-28 18:22:03]   [bio] Adaptive brain stimulation 2.0 for Parkinsonian gait...
+[2026-06-28 18:22:15]     OK: Adaptive Brain Stimulation 2.0 Improves Parkinsonian Ga
+[2026-06-28 18:22:15]   [earth] Scientists open a million-year-old time capsule hidden ...
+[2026-06-28 18:22:26]     OK: Scientists Open Million-Year-Old Time Capsule Beneath N
+[2026-06-28 18:22:26] Writing HTML...
+[2026-06-28 18:22:26]   MORNING updated (5 articles written)
+[2026-06-28 18:22:26] === Done: 5 articles ===
+[2026-06-28 18:25:54] === Cosmos update: evening edition ===
+[2026-06-28 18:25:54] Fetching RSS feeds...
+[2026-06-28 18:25:54]     space ← www.nasa.gov: 8 entries
+[2026-06-28 18:25:55]     space ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:56]     ai ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:56]     ai ← www.technologyreview.com: 8 entries
+[2026-06-28 18:25:56]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:25:57]     bio ← www.sciencedaily.com: 0 entries
+[2026-06-28 18:25:57]     bio ← www.nature.com: 8 entries
+[2026-06-28 18:25:57]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:58]     earth ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:58]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:59]     quantum ← www.sciencedaily.com: 8 entries
+[2026-06-28 18:25:59] Generating articles with Claude...
+[2026-06-28 18:25:59]   [space] NASA Tests New Refuel Device for Future In-Space Refuel...
+[2026-06-28 18:26:10]     OK: NASA Tests New Refuel Device for Future In-Space Refuel
+[2026-06-28 18:26:10]   [ai] Brain-inspired chip runs near absolute zero and could t...
+[2026-06-28 18:26:21]     OK: Brain-inspired chip operates near absolute zero, promis
+[2026-06-28 18:26:21]   [bio] Immersive virtual reality with synchronous neurostimula...
+[2026-06-28 18:26:33]     OK: Virtual Reality Combined with Neurostimulation Accelera
+[2026-06-28 18:26:33]   [earth] Hidden geological process offsets carbon emissions from...
+[2026-06-28 18:26:43]     OK: Hidden geological process offsets carbon emissions from
+[2026-06-28 18:26:43]   [quantum] Einstein’s “biggest blunder” may finally have an explan...
+[2026-06-28 18:26:55]     OK: Einstein's "biggest blunder" may finally have an explan
+[2026-06-28 18:26:55] Writing HTML...
+[2026-06-28 18:26:55]   EVENING updated (5 articles written)
+[2026-06-28 18:26:55] === Done: 5 articles ===
