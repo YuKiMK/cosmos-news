@@ -177,7 +177,7 @@ Return JSON with EXACTLY this structure (all string values must use escaped doub
 {{
   "title": "Polished English headline — keep scientific terms",
   "excerpt": "Two-sentence English summary of key finding and significance.",
-  "body": "<p>English paragraph: what was found and how.</p><p>English paragraph: implications. Source: <em>{source}, {month_year}</em>.</p>",
+  "body": "<p><strong>Background:</strong> One paragraph on the scientific context and why this research matters.</p><p><strong>Discovery:</strong> One paragraph on exactly what was found, including key numbers, measurements, or observations.</p><p><strong>Methodology:</strong> One paragraph on how the research was conducted — tools, techniques, and scale.</p><p><strong>Implications:</strong> One paragraph on what this means for science, society, or future research.</p><p><strong>What's Next:</strong> One paragraph on follow-up work, upcoming studies, or open questions. Source: <em>{source}, {month_year}</em>.</p>",
   "vocab": [
     {{"term": "Term1", "r": "カタカナ読み", "ja": "短い日本語訳", "desc": "日本語解説（50字以内）"}},
     {{"term": "Term2", "r": "カタカナ2", "ja": "訳2", "desc": "解説2"}},
@@ -210,7 +210,7 @@ def gen_article(client: anthropic.Anthropic, raw: dict, cat: str,
     try:
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=2048,
+            max_tokens=3000,
             system=_SYSTEM,
             messages=[{"role": "user", "content": prompt}],
         )
