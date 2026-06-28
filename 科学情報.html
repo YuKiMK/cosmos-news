@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmos — Science News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",sans-serif;font-size:15px;line-height:1.7;min-height:100vh;transition:background .4s,color .4s}
+h1,h2,h3,h4{font-family:"Space Grotesk",sans-serif}
+[data-theme="dark"]{
+  --bg:#080C16;--bg-card:#0D1220;--bg-card-hover:#111827;--bg-modal:#0F1629;
+  --bg-overlay:rgba(4,6,14,.88);--border:rgba(255,255,255,.07);--border-hover:rgba(0,210,255,.35);
+  --text-primary:#E8EDF8;--text-secondary:#8B97B5;--text-muted:#4A5568;
+  --accent:#00D2FF;--accent-glow:rgba(0,210,255,.15);--accent-soft:rgba(0,210,255,.08);
+  --purple:#7B61FF;--tag-bg:rgba(255,255,255,.06);--scan-line:rgba(0,210,255,.6);
+  --header-bg:rgba(8,12,22,.92);--vocab-bg:#0A1628;--vocab-border:rgba(123,97,255,.25);
+  --quiz-bg:#0A1628;--quiz-border:rgba(0,210,255,.15);
+  --qc:rgba(0,210,130,.15);--qw:rgba(255,80,80,.12);--qcb:rgba(0,210,130,.5);--qwb:rgba(255,80,80,.4);
+  --fav:#FFD700;--sidebar-bg:#09111F;--panel-bg:#0D1627;--search-bg:#0A1220;
+}
+[data-theme="light"]{
+  --bg:#F7F8FC;--bg-card:#fff;--bg-card-hover:#F0F4FF;--bg-modal:#fff;
+  --bg-overlay:rgba(15,25,60,.6);--border:rgba(0,0,0,.08);--border-hover:rgba(0,100,200,.4);
+  --text-primary:#0D1220;--text-secondary:#4A5568;--text-muted:#9AA5B4;
+  --accent:#0064C8;--accent-glow:rgba(0,100,200,.1);--accent-soft:rgba(0,100,200,.06);
+  --purple:#5B41E8;--tag-bg:rgba(0,0,0,.05);--scan-line:rgba(0,100,200,.5);
+  --header-bg:rgba(247,248,252,.92);--vocab-bg:#F0F0FF;--vocab-border:rgba(91,65,232,.2);
+  --quiz-bg:#F5F8FF;--quiz-border:rgba(0,100,200,.12);
+  --qc:rgba(0,160,90,.1);--qw:rgba(200,50,50,.08);--qcb:rgba(0,160,90,.45);--qwb:rgba(200,50,50,.35);
+  --fav:#E6A500;--sidebar-bg:#EEF0F8;--panel-bg:#fff;--search-bg:#EEF2FF;
+}
+body{background:var(--bg);color:var(--text-primary)}
+/* Header */
+.header{position:sticky;top:0;z-index:200;background:var(--header-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 clamp(1rem,4vw,3rem);height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent);position:relative;overflow:hidden;flex-shrink:0}
+.logo-mark::before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--accent);top:50%;left:50%;transform:translate(-50%,-50%)}
+.logo-mark::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--accent);top:50%;left:50%;transform:translate(-50%,-50%)}
+.logo-text{font-size:18px;font-weight:600;color:var(--text-primary);letter-spacing:-.3px}
+.logo-text span{color:var(--accent)}
+.header-center{flex:1;max-width:460px;position:relative}
+.search-input{width:100%;height:36px;background:var(--search-bg);border:1px solid var(--border);border-radius:10px;padding:0 38px 0 14px;font-size:13px;font-family:"Inter",sans-serif;color:var(--text-primary);outline:none;transition:border-color .2s}
+.search-input::placeholder{color:var(--text-muted)}
+.search-input:focus{border-color:var(--accent)}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;display:none;padding:2px 4px}
+.search-clear.show{display:block}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#00D27A;animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;position:relative}
+.icon-btn:hover{border-color:var(--border-hover);color:var(--fav);background:rgba(255,215,0,.08)}
+.badge{position:absolute;top:-5px;right:-5px;background:var(--accent);color:#080C16;font-size:9px;font-weight:700;width:15px;height:15px;border-radius:50%;display:none;align-items:center;justify-content:center}
+.badge.show{display:flex}
+.theme-toggle{width:44px;height:24px;border-radius:12px;background:var(--tag-bg);border:1px solid var(--border);cursor:pointer;position:relative;transition:background .3s;flex-shrink:0}
+.theme-toggle::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:var(--accent);top:2px;left:2px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px)}
+.ti{position:absolute;font-size:10px;top:50%;transform:translateY(-50%);pointer-events:none;transition:opacity .3s}
+.ti.moon{left:5px}
+.ti.sun{right:4px}
+[data-theme="light"] .ti.moon{opacity:0}
+[data-theme="dark"] .ti.sun{opacity:0}
+/* Layout */
+.layout{display:flex;min-height:calc(100vh - 64px)}
+.sidebar{width:250px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);padding:1.25rem .875rem;display:flex;flex-direction:column;gap:1.25rem;overflow-y:auto}
+.main-wrap{flex:1;min-width:0}
+@media(max-width:900px){.sidebar{display:none}}
+.slabel{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem}
+.info-box{background:var(--panel-bg);border:1px solid var(--border);border-radius:10px;padding:.75rem .875rem}
+.info-row{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;margin-bottom:.35rem}
+.info-row:last-child{margin-bottom:0}
+.info-label{color:var(--text-muted)}
+.info-val{font-weight:500;color:var(--text-primary)}
+.prog-bar{height:3px;background:var(--border);border-radius:2px;margin-top:.625rem;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 60s linear}
+.sb-favs{display:flex;flex-direction:column;gap:5px}
+.sb-fav-item{display:flex;align-items:flex-start;gap:7px;padding:.5rem .625rem;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:all .2s}
+.sb-fav-item:hover{background:var(--accent-soft);border-color:var(--border-hover)}
+.sb-fav-dot{width:5px;height:5px;border-radius:50%;background:var(--fav);margin-top:7px;flex-shrink:0}
+.sb-fav-title{font-size:11.5px;color:var(--text-secondary);line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.sb-empty{font-size:11.5px;color:var(--text-muted);text-align:center;padding:.875rem .5rem}
+/* Main */
+.main{max-width:1080px;margin:0 auto;padding:clamp(1.25rem,3.5vw,2.5rem) clamp(.875rem,2.5vw,2rem)}
+.hero{margin-bottom:1.75rem}
+.hero-eye{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.hero-title{font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;letter-spacing:-1.2px;line-height:1.15;max-width:520px}
+.hero-title span{color:var(--accent);position:relative}
+.hero-title span::after{content:"";position:absolute;bottom:2px;left:0;right:0;height:2px;background:var(--accent);opacity:.4;border-radius:2px}
+.hero-sub{margin-top:.625rem;font-size:13.5px;color:var(--text-secondary);max-width:440px}
+/* Search results */
+.srp{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:1.75rem;display:none}
+.srp.show{display:block}
+.srp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem}
+.srp-title{font-size:13px;font-weight:600;color:var(--text-primary)}
+.srp-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;padding:2px 6px;border-radius:6px}
+.srp-close:hover{color:var(--text-primary)}
+.sr-ai{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:.75rem .875rem;margin-bottom:.875rem;font-size:12.5px;color:var(--text-primary);line-height:1.6;display:none}
+.sr-ai.show{display:block}
+.sr-ai-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.sr-item{display:flex;gap:10px;padding:.625rem .5rem;border-bottom:1px solid var(--border);cursor:pointer;border-radius:8px;transition:background .2s}
+.sr-item:last-child{border-bottom:none}
+.sr-item:hover{background:var(--accent-soft)}
+.sr-img{width:52px;height:38px;border-radius:6px;object-fit:cover;flex-shrink:0}
+.sr-title{font-size:12.5px;font-weight:500;color:var(--text-primary);line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin-bottom:2px}
+.sr-meta{font-size:11px;color:var(--text-muted)}
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:12.5px;font-weight:500;font-family:"Inter",sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.tab:hover{border-color:var(--border-hover);color:var(--text-primary);background:var(--accent-soft)}
+.tab.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.tab-n{font-size:10px;background:var(--tag-bg);padding:1px 5px;border-radius:10px;color:var(--text-muted)}
+.tab.active .tab-n{background:var(--accent);color:var(--bg)}
+/* Edition badge */
+.ed-badge{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.ed-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.ed-time{font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent)}
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:.875rem}
+.cf{grid-column:span 7}
+.cs{grid-column:span 5}
+.cn{grid-column:span 4}
+@media(max-width:1000px){.cf{grid-column:span 12}.cs{grid-column:span 6}.cn{grid-column:span 6}}
+@media(max-width:640px){.cs{grid-column:span 12}.cn{grid-column:span 12}}
+/* Card */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .3s,box-shadow .3s,background .3s;position:relative;display:flex;flex-direction:column;animation:cin .4s ease both}
+.card:hover{transform:translateY(-4px);border-color:var(--border-hover);background:var(--bg-card-hover);box-shadow:0 20px 60px rgba(0,0,0,.25),0 0 0 1px var(--border-hover)}
+.card::before{content:"";position:absolute;top:-2px;left:0;right:0;height:2px;background:var(--scan-line);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.4,0,.2,1);z-index:2}
+.card:hover::before{transform:scaleX(1)}
+.card::after{content:"";position:absolute;inset:0;border-radius:16px;background:radial-gradient(ellipse at top,var(--accent-glow),transparent 70%);opacity:0;transition:opacity .4s;pointer-events:none}
+.card:hover::after{opacity:1}
+.ciw{overflow:hidden;position:relative;flex-shrink:0}
+.cimg{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:transform .5s}
+.cf .cimg{aspect-ratio:16/8}
+.card:hover .cimg{transform:scale(1.03)}
+.iovl{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(transparent,rgba(8,12,22,.6));pointer-events:none}
+[data-theme="light"] .iovl{background:linear-gradient(transparent,rgba(247,248,252,.3))}
+.cfav{position:absolute;top:8px;right:8px;z-index:3;width:28px;height:28px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.4);backdrop-filter:blur(6px);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;opacity:0}
+.card:hover .cfav{opacity:1}
+.cfav.active{opacity:1;color:var(--fav);border-color:var(--fav)}
+.cbody{padding:1.1rem 1.25rem 1.25rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+.cf .cbody{padding:1.375rem 1.625rem 1.625rem}
+.cmeta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ccat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:5px}
+.cat-space{background:rgba(0,180,255,.12);color:#00B4FF}
+.cat-quantum{background:rgba(123,97,255,.12);color:#9C7BFF}
+.cat-ai{background:rgba(0,210,130,.12);color:#00D282}
+.cat-bio{background:rgba(255,120,90,.12);color:#FF8A70}
+.cat-earth{background:rgba(90,210,120,.12);color:#5DD27A}
+[data-theme="light"] .cat-space{background:rgba(0,100,200,.1);color:#0064C8}
+[data-theme="light"] .cat-quantum{background:rgba(91,65,232,.1);color:#5B41E8}
+[data-theme="light"] .cat-ai{background:rgba(0,150,100,.1);color:#009664}
+[data-theme="light"] .cat-bio{background:rgba(200,80,50,.1);color:#C85032}
+[data-theme="light"] .cat-earth{background:rgba(40,160,80,.1);color:#28A050}
+.ctime{font-size:11px;color:var(--text-muted)}
+.ctitle{font-size:13.5px;font-weight:600;line-height:1.45;color:var(--text-primary);letter-spacing:-.2px;transition:color .2s}
+.cf .ctitle{font-size:clamp(1rem,2vw,1.35rem);letter-spacing:-.4px;font-weight:700}
+.card:hover .ctitle{color:var(--accent)}
+.cexc{font-size:12px;color:var(--text-secondary);line-height:1.65;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.cf .cexc{-webkit-line-clamp:4;font-size:13px}
+.cfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.5rem;border-top:1px solid var(--border)}
+.csrc{font-size:11px;color:var(--text-muted);font-weight:500;display:flex;align-items:center;gap:4px}
+.sdot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.cmore{font-size:11px;color:var(--accent);font-weight:500;opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s}
+.card:hover .cmore{opacity:1;transform:translateX(0)}
+@keyframes cin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(2){animation-delay:.05s}.card:nth-child(3){animation-delay:.1s}
+.card:nth-child(4){animation-delay:.15s}.card:nth-child(5){animation-delay:.2s}
+.card:nth-child(6){animation-delay:.25s}.card:nth-child(n+7){animation-delay:.3s}
+/* Stats */
+.stats{margin:2.25rem 0 0;padding:1.1rem 0;border-top:1px solid var(--border);display:flex;gap:clamp(1.25rem,4vw,3.5rem);flex-wrap:wrap}
+.sv{font-family:"Space Grotesk",sans-serif;font-size:21px;font-weight:700;color:var(--accent);letter-spacing:-.5px;line-height:1}
+.sl{font-size:11px;color:var(--text-muted);margin-top:3px;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+/* Modal */
+.movl{position:fixed;inset:0;background:var(--bg-overlay);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:clamp(.75rem,2vw,1.5rem);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .35s}
+.movl.open{opacity:1;pointer-events:all}
+.mpanel{background:var(--bg-modal);border:1px solid var(--border);border-radius:20px;width:100%;max-width:760px;margin:auto;overflow:hidden;transform:translateY(24px) scale(.98);transition:transform .4s cubic-bezier(.4,0,.2,1);box-shadow:0 40px 80px rgba(0,0,0,.4);position:relative}
+.mpanel::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.8;z-index:1}
+.movl.open .mpanel{transform:translateY(0) scale(1)}
+.mimg{width:100%;aspect-ratio:16/7;object-fit:cover;display:block}
+.mcont{padding:clamp(1.1rem,3vw,2rem)}
+.mtop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.875rem;gap:1rem}
+.mtags{display:flex;gap:8px;flex-wrap:wrap}
+.m-actions-top{display:flex;gap:7px}
+.mbtn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--tag-bg);color:var(--text-secondary);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:sans-serif}
+.mbtn:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.mfav-btn.active,.mfav-btn:hover{border-color:var(--fav)!important;color:var(--fav)!important;background:rgba(255,215,0,.1)!important}
+.mtitle{font-size:clamp(1.05rem,2.3vw,1.55rem);font-weight:700;line-height:1.25;letter-spacing:-.4px;color:var(--text-primary);margin-bottom:.75rem}
+.mbyline{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;flex-wrap:wrap}
+.msrc{font-size:12.5px;font-weight:600;color:var(--accent)}
+.msep,.mdate{font-size:12.5px;color:var(--text-muted)}
+.mbody{font-size:14px;line-height:1.85;color:var(--text-secondary);margin-bottom:1.5rem}
+.mbody p+p{margin-top:.875em}
+.mbody em{color:var(--text-primary);font-style:italic}
+/* Divider */
+.divider{display:flex;align-items:center;gap:10px;margin:1.5rem 0 .875rem}
+.dl{flex:1;height:1px;background:var(--border)}
+.dlabel{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;display:flex;align-items:center;gap:5px}
+/* Vocab */
+.vpanel{background:var(--vocab-bg);border:1px solid var(--vocab-border);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.5rem}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:.75rem}
+.vitem{padding:.625rem .75rem;border-radius:9px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.vitem:hover{border-color:var(--border-hover);background:var(--accent-soft)}
+.kh{position:absolute;top:5px;right:7px;font-size:10px;color:var(--text-muted);opacity:0;transition:opacity .2s;pointer-events:none}
+.vitem:hover .kh{opacity:1}
+.vterm{font-family:"Space Grotesk",sans-serif;font-size:12.5px;font-weight:600;color:var(--purple);margin-bottom:2px}
+.vread{font-size:10.5px;color:var(--text-muted);margin-bottom:4px}
+.vja{font-size:11.5px;color:var(--text-primary);font-weight:500;margin-bottom:3px}
+.vdesc{font-size:11px;color:var(--text-secondary);line-height:1.55}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:#0F1629;border:1px solid var(--accent);border-radius:10px;padding:.5rem 1.1rem;font-size:12.5px;font-weight:500;color:var(--accent);z-index:9999;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+[data-theme="light"] .toast{background:#fff}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* Quiz */
+.qpanel{background:var(--quiz-bg);border:1px solid var(--quiz-border);border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:.5rem}
+.qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:7px}
+.qhtxt{font-family:"Space Grotesk",sans-serif;font-size:13.5px;font-weight:600;color:var(--text-primary)}
+.qprog{display:flex;align-items:center;gap:7px}
+.qdots{display:flex;gap:4px}
+.qdot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:background .3s}
+.qdot.done{background:var(--accent)}.qdot.cur{background:var(--purple)}
+.qscr{font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:20px}
+.qq{font-size:13px;font-weight:500;color:var(--text-primary);line-height:1.6;margin-bottom:.75rem}
+.qopts{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
+.qopt{padding:8px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-size:12px;font-family:"Inter",sans-serif;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,color .2s;display:flex;align-items:flex-start;gap:8px}
+.qopt:hover:not(:disabled){border-color:var(--accent);color:var(--text-primary);background:var(--accent-soft)}
+.qopt:disabled{cursor:default}
+.qopt.correct{background:var(--qc);border-color:var(--qcb);color:var(--text-primary)}
+.qopt.wrong{background:var(--qw);border-color:var(--qwb);color:var(--text-primary)}
+.ql{font-weight:600;color:var(--text-muted);flex-shrink:0;min-width:14px}
+.qopt.correct .ql{color:#00D282}.qopt.wrong .ql{color:#FF6060}
+.qfb{font-size:12px;color:var(--text-secondary);line-height:1.6;padding:8px 10px;border-radius:7px;background:var(--tag-bg);border-left:3px solid var(--accent);display:none}
+.qfb.show{display:block}
+.qnav{display:flex;justify-content:flex-end;margin-top:.875rem}
+.qnext{padding:6px 14px;border-radius:7px;border:none;background:var(--accent);color:#080C16;font-size:12px;font-weight:600;font-family:"Inter",sans-serif;cursor:pointer;transition:opacity .2s,transform .2s;display:none}
+.qnext.show{display:block}
+.qnext:hover{opacity:.85;transform:translateY(-1px)}
+.qres{text-align:center;padding:.875rem 0 .5rem;display:none}
+.qres.show{display:block}
+.qrscore{font-family:"Space Grotesk",sans-serif;font-size:2.25rem;font-weight:700;color:var(--accent);line-height:1;margin-bottom:.35rem}
+.qrlabel{font-size:11.5px;color:var(--text-secondary);margin-bottom:1rem}
+.qrmsg{font-size:13.5px;font-weight:500;color:var(--text-primary);margin-bottom:1rem;line-height:1.5}
+.qretry{padding:7px 16px;border-radius:7px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-size:12px;font-weight:600;font-family:"Inter",sans-serif;cursor:pointer}
+.qretry:hover{background:var(--accent-soft)}
+/* Bottom actions */
+.mactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.1rem}
+.btn-p{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:8px;background:var(--accent);color:#080C16;font-size:12.5px;font-weight:600;font-family:"Inter",sans-serif;border:none;cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s}
+.btn-p:hover{opacity:.85;transform:translateY(-1px)}
+.btn-s{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:8px;background:transparent;color:var(--text-secondary);font-size:12.5px;font-weight:500;font-family:"Inter",sans-serif;border:1px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.btn-s:hover{border-color:var(--border-hover);color:var(--text-primary);background:var(--accent-soft)}
+/* Fav panel */
+.fpovl{position:fixed;inset:0;background:var(--bg-overlay);z-index:800;opacity:0;pointer-events:none;transition:opacity .3s}
+.fpovl.open{opacity:1;pointer-events:all}
+.fppanel{position:fixed;top:0;right:0;bottom:0;width:min(400px,95vw);background:var(--bg-modal);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:801;display:flex;flex-direction:column}
+.fppanel.open{transform:translateX(0)}
+.fphead{padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.fptitle{font-family:"Space Grotesk",sans-serif;font-size:15px;font-weight:600;color:var(--text-primary)}
+.fpclose{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fpbody{flex:1;overflow-y:auto;padding:.875rem}
+.fp-item{display:flex;gap:10px;padding:.75rem;border-radius:10px;border:1px solid var(--border);margin-bottom:.5rem;cursor:pointer;transition:all .2s;background:var(--bg-card)}
+.fp-item:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.fp-img{width:60px;height:44px;border-radius:7px;object-fit:cover;flex-shrink:0}
+.fp-title{font-size:12.5px;font-weight:500;color:var(--text-primary);line-height:1.4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin-bottom:3px}
+.fp-meta{font-size:10.5px;color:var(--text-muted)}
+.fp-rm{width:24px;height:24px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.fp-rm:hover{border-color:rgba(255,80,80,.5);color:#FF6060}
+.fp-empty{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:12.5px;line-height:1.6}
+.empty-state{grid-column:span 12;text-align:center;padding:3.5rem 2rem;color:var(--text-muted);font-size:13.5px}
+.empty-state span{display:block;font-size:1.75rem;margin-bottom:.625rem;opacity:.4}
+.footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:11.5px;letter-spacing:.04em}
+.footer a{color:var(--accent);text-decoration:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.arcovl{position:fixed;inset:0;background:var(--bg-overlay);z-index:800;opacity:0;pointer-events:none;transition:opacity .3s}
+.arcovl.open{opacity:1;pointer-events:all}
+.arcpanel{position:fixed;top:0;left:0;bottom:0;width:min(380px,95vw);background:var(--bg-modal);border-right:1px solid var(--border);transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:801;display:flex;flex-direction:column}
+.arcpanel.open{transform:translateX(0)}
+.arc-ed{display:flex;align-items:center;justify-content:space-between;padding:.75rem .875rem;border-radius:10px;border:1px solid var(--border);margin-bottom:.5rem;cursor:pointer;background:var(--bg-card);transition:all .2s}
+.arc-ed:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.arc-ed-date{font-size:13px;font-weight:600;color:var(--text-primary)}
+.arc-ed-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
+.arc-ed-cnt{font-size:11px;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:10px;white-space:nowrap}
+.arc-banner{display:none;align-items:center;justify-content:space-between;padding:.625rem 1rem;background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;margin-bottom:1rem;font-size:12.5px;color:var(--accent)}
+.arc-banner.show{display:flex}
+.arc-back{background:none;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:11.5px;font-family:"Inter",sans-serif;padding:3px 10px;cursor:pointer}
+.arc-back:hover{background:var(--accent-soft)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinning{animation:spin .8s linear infinite;display:inline-block}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<header class="header">
+  <div class="logo"><div class="logo-mark"></div><span class="logo-text">Cosmos<span>.</span></span></div>
+  <div class="header-center">
+    <input class="search-input" id="si" type="text" placeholder="🔍  例:「ゲノム編集」「量子コンピュータ」「惑星」などAI検索...">
+    <button class="search-clear" id="sc">✕</button>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div><span id="edLbl">—</span></div>
+    <button class="icon-btn" id="updateBtn" title="記事を今すぐ更新">🔄</button>
+    <button class="icon-btn" id="favBtn" title="お気に入り">☆<span class="badge" id="favBadge">0</span></button>
+    <button class="theme-toggle" id="tt"><span class="ti moon">🌙</span><span class="ti sun">☀️</span></button>
+  </div>
+</header>
+<div class="fpovl" id="fpovl"></div>
+<div class="fppanel" id="fpp">
+  <div class="fphead"><span class="fptitle">⭐ お気に入り記事</span><button class="fpclose" id="fpc">✕</button></div>
+  <div class="fpbody" id="fpb"></div>
+</div>
+<div class="arcovl" id="arcovl"></div>
+<div class="arcpanel" id="arcp">
+  <div class="fphead"><span class="fptitle">📚 記事アーカイブ</span><button class="fpclose" id="arcc">✕</button></div>
+  <div class="fpbody" id="arcb"></div>
+</div>
+<div class="layout">
+  <aside class="sidebar">
+    <div>
+      <div class="slabel">📡 更新スケジュール</div>
+      <div class="info-box">
+        <div class="info-row"><span class="info-label">エディション</span><span class="info-val" id="sb-ed">—</span></div>
+        <div class="info-row"><span class="info-label">次回更新</span><span class="info-val" id="sb-next">—</span></div>
+        <div class="info-row"><span class="info-label">記事数</span><span class="info-val" id="sb-cnt">—</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="sb-prog" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="slabel">⭐ お気に入り</div>
+      <div class="sb-favs" id="sbf"><div class="sb-empty">まだお気に入りがありません</div></div>
+    </div>
+    <div>
+      <div class="slabel">📚 アーカイブ</div>
+      <div class="info-box">
+        <div class="info-row"><span class="info-label">総記事数</span><span class="info-val" id="sb-atot">—</span></div>
+        <div class="info-row"><span class="info-label">蓄積セッション</span><span class="info-val" id="sb-asess">—</span></div>
+      </div>
+      <button class="btn-s" style="width:100%;margin-top:.5rem;justify-content:center;font-size:12px" onclick="openArc()">📂 過去の記事を見る</button>
+    </div>
+  </aside>
+  <div class="main-wrap">
+    <main class="main">
+      <section class="hero">
+        <p class="hero-eye">Science Intelligence</p>
+        <h1 class="hero-title">Discover the <span>frontiers</span> of human knowledge</h1>
+        <p class="hero-sub">NASA · Nature · ScienceDaily · SETI Institute · MIT Tech Review — 朝夕2エディション</p>
+      </section>
+      <div class="arc-banner" id="arc-banner">
+        <span class="arc-banner-txt">アーカイブを表示中</span>
+        <button class="arc-back" onclick="exitArcMode()">← 現在の記事に戻る</button>
+      </div>
+      <div class="srp" id="srp">
+        <div class="srp-head"><div class="srp-title" id="srp-title">検索結果</div><button class="srp-close" id="srp-close">✕</button></div>
+        <div class="sr-ai" id="sr-ai"><div class="sr-ai-label">🤖 AI サマリー</div><div id="sr-ai-txt"></div></div>
+        <div id="sr-list"></div>
+      </div>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="ed-badge"><span class="ed-label">📰 Edition</span><span class="ed-time" id="edTime">—</span></div>
+      <div class="grid" id="grid" role="list"></div>
+      <div class="stats">
+        <div><div class="sv" id="st-today">—</div><div class="sl">Today's Articles</div></div>
+        <div><div class="sv" id="st-arc">—</div><div class="sl">Archive Total</div></div>
+        <div><div class="sv">5</div><div class="sl">Disciplines</div></div>
+        <div><div class="sv" id="st-upd">—</div><div class="sl">Last Updated</div></div>
+      </div>
+    </main>
+    <footer class="footer">Cosmos Science News — NASA · Nature · ScienceDaily · SETI · MIT Tech Review &bull; <a href="#">About</a></footer>
+  </div>
+</div>
+<div class="movl" id="movl" role="dialog" aria-modal="true">
+  <div class="mpanel">
+    <img class="mimg" id="mimg" src="" alt="">
+    <div class="mcont">
+      <div class="mtop">
+        <div class="mtags" id="mtags"></div>
+        <div class="m-actions-top">
+          <button class="mbtn mfav-btn" id="mfav">☆</button>
+          <button class="mbtn" id="mclose">✕</button>
+        </div>
+      </div>
+      <h2 class="mtitle" id="mtitle"></h2>
+      <div class="mbyline"><span class="msrc" id="msrc"></span><span class="msep">·</span><span class="mdate" id="mdate"></span></div>
+      <div class="mbody" id="mbody"></div>
+      <div class="divider"><div class="dl"></div><div class="dlabel">📖 Key Terms — タップして Google Keep に保存</div><div class="dl"></div></div>
+      <div class="vpanel"><div class="vgrid" id="vgrid"></div></div>
+      <div class="divider"><div class="dl"></div><div class="dlabel">🧠 Comprehension Quiz（5問）</div><div class="dl"></div></div>
+      <div class="qpanel" id="qpanel"></div>
+      <div class="mactions">
+        <a id="alink" class="btn-p" href="#" target="_blank" rel="noopener">Read Full Article ↗</a>
+        <button class="btn-s" id="keepAll">📒 全用語を Keep 保存</button>
+        <button class="btn-s" onclick="closeMod()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const CC={space:"cat-space",quantum:"cat-quantum",ai:"cat-ai",bio:"cat-bio",earth:"cat-earth"};
+const CL={space:"Space & Astronomy",quantum:"Quantum & Physics",ai:"AI & Technology",bio:"Life Sciences",earth:"Earth Sciences"};
+const CATS=[{id:"all",l:"All",i:"◎"},{id:"space",l:"Space & Astronomy",i:"✦"},{id:"quantum",l:"Quantum & Physics",i:"⬡"},{id:"ai",l:"AI & Technology",i:"◈"},{id:"bio",l:"Life Sciences",i:"⬮"},{id:"earth",l:"Earth Sciences",i:"◍"}];
+
+// Helper to make article objects
+function A(id,ed,title,excerpt,body,cat,src,url,time,date,img,feat,vocab,quiz){
+  return{id,ed,title,excerpt,body,cat,src,url,time,date,img,feat,vocab,quiz};
+}
+function V(term,r,ja,desc){return{term,r,ja,desc};}
+function Q(q,opts,ans,fb){return{q,opts,ans,fb};}
+
+/*MORNING_START*/
+const MORNING=[
+A("m1","morning",
+"NASA Announces Winners of 2026 Human Lander Challenge for Lunar Life Support Systems",
+"NASA has recognized top student-developed solutions for environmental control and life support systems designed for crewed lunar landers competing in the 2026 Human Lander Challenge. This achievement demonstrates how university innovation is advancing critical technologies essential to NASA's Artemis program and humanity's return to the Moon.",
+"<p>University teams from around the world have completed months of intensive research and development to create advanced environmental control and life support systems (ECLSS) for future crewed lunar landers. The winning solutions showcase innovative approaches to managing oxygen, water, temperature regulation, and waste processing in the harsh lunar environment. These student-developed technologies represent significant engineering breakthroughs that will inform NASA's design specifications for actual Artemis hardware.</p><p>The 2026 Human Lander Challenge represents a crucial bridge between academic innovation and operational spaceflight systems. By engaging the next generation of aerospace engineers and scientists, NASA builds a pipeline of talent while accelerating the development of reliable life support technologies. These award-winning concepts will directly contribute to ensuring astronaut safety and mission success when American explorers return to the lunar surface as part of the Artemis program. Source: <em>NASA, June 2026</em>.</p>",
+"space","NASA","https://www.nasa.gov/directorates/esdmd/artemis-campaign-development-division/human-landing-system-program/nasa-announces-winners-for-2026-human-lander-challenge/",
+"5 hours ago","June 28, 2026","https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=900&q=80",true,
+[V("Environmental Control and Life Support Systems","カンキョウコントロール アンド ライフ サポート システムズ","環境制御・生命維持装置","宇宙船内の酸素、水、温度、気圧などを管理し、宇宙飛行士の生命を維持する統合システム。"),
+  V("Artemis program","アルテミス プログラム","アルテミス計画","NASAが月への有人探査を目指す大規模な宇宙計画。21世紀の月面探査と火星進出の基盤となる。"),
+  V("Crewed lunar lander","クルード ルーナー ランダー","有人月面着陸船","宇宙飛行士を乗せて月面に安全に着陸・上昇する宇宙船。生命維持装置を搭載する必要がある。"),
+  V("Life support system","ライフ サポート システム","生命維持装置","宇宙飛行士が生存するために必要な酸素供給、CO2除去、水管理などを行う機械システム。")],
+[Q("2026年のHuman Lander Challengeで主に開発されたのは何ですか？",["ロケットエンジン","環境制御・生命維持装置","通信システム","推進燃料"],1,"このチャレンジは月面着陸船の環境制御・生命維持装置の開発に焦点を当てています。"),
+  Q("このチャレンジの参加者はどのグループですか？",["民間企業のみ","政府機関のみ","大学チーム","国際宇宙ステーション運営者"],2,"世界中の大学チームが革新的な技術開発に取り組んでいます。"),
+  Q("Artemis計画の主な目標は何ですか？",["金星探査","月への有人探査","小惑星採掘","国際宇宙ステーション拡張"],1,"Artemis計画はアメリカの宇宙飛行士を月に戻し、火星への足がかりを作ります。"),
+  Q("生命維持装置が月面で管理する必要がある項目はどれですか？",["地形測量のみ","通信周波数のみ","酸素、水、温度、気圧など","岩石採集のみ"],2,"ECLSS は酸素供給、水管理、温度制御など複数の生命維持機能を統合します。"),
+  Q("このような学生プロジェクトが重要な理由は？",["費用を削減するため","次世代エンジニアの育成と実際の技術開発の加速","単なる教育目的のみ","国家間の競争回避"],1,"大学の革新力を活用して、実際のミッション技術を開発しながら才能を育成します。")]),
+
+A("m2","morning",
+"NASA's Cold Atom Lab Creates One of the Weirdest Forms of Matter in Space",
+"NASA's upgraded Cold Atom Lab aboard the International Space Station is producing ultra-cold quantum matter with extraordinary properties that defy conventional physics. These experiments promise revolutionary insights into quantum behavior and could lead to transformative technologies for both space-based and terrestrial applications.",
+"<p>NASA's enhanced Cold Atom Lab is transforming the International Space Station into a unique platform for quantum research by creating matter at temperatures near absolute zero. At these extreme conditions, atoms behave in astonishing ways, exhibiting quantum properties that reveal fundamental secrets about the universe's underlying structure.</p><p>The implications of this research extend far beyond theoretical physics. Ultra-cold atomic systems could enable the development of quantum sensors, quantum computers, and precision measurement devices with unprecedented capabilities. By conducting these experiments in the microgravity environment of space, researchers can observe quantum phenomena impossible to study on Earth, opening new frontiers in both fundamental science and practical technology development. Source: <em>Quantum Physics News -- ScienceDaily, June 2026</em>.</p>",
+"quantum","Quantum Physics News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260622091507.htm",
+"4 hours ago","June 28, 2026","https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&q=80",false,
+[V("Cold Atom Lab","コールド・アトム・ラボ","冷却原子研究装置","原子を極低温に冷却して量子現象を研究するNASAの宇宙実験装置。微小重力環境で利用される。"),
+  V("Bose-Einstein condensate","ボーズ・アインシュタイン凝縮体","ボーズ・アインシュタイン凝縮","極低温で複数の原子が同じ量子状態に落ち込んだ奇妙な物質状態。量子物理学の重要な研究対象。"),
+  V("Quantum mechanics","クォンタム・メカニクス","量子力学","原子・素粒子レベルでの物理現象を記述する理論。通常の物理法則と異なる法則に従う。"),
+  V("Microgravity","マイクログラビティ","微小重力","宇宙ステーション内でほぼ無重力に近い状態。地上では実現できない量子実験が可能になる。")],
+[Q("NASAの Cold Atom Lab はどこに設置されていますか？",["月面基地","国際宇宙ステーション","火星探査機","地球の高山"],1,"Cold Atom Lab は国際宇宙ステーション上に設置されており、宇宙の微小重力環境を活用して量子研究を行っています。"),
+  Q("Cold Atom Lab が極低温で作り出す奇妙な物質とは何ですか？",["プラズマ","量子コンピュータ","ボーズ・アインシュタイン凝縮","ダークマター"],2,"ボーズ・アインシュタイン凝縮は、複数の原子が同一の量子状態に落ち込んだ極めて奇妙な物質状態です。"),
+  Q("なぜ宇宙ステーションで量子実験を行うのですか？",["より低い温度が得られる","微小重力環境が利用できる","太陽からのエネルギー","磁場が強い"],1,"宇宙ステーション内の微小重力環境では、地上では不可能な量子現象の観察と研究が可能になります。"),
+  Q("Cold Atom Lab の研究成果として期待される技術は何ですか？",["新型飛行機エンジン","量子センサーと量子コンピュータ","人工知能システム","医療用X線装置"],1,"超高精度なセンサーと強力な量子コンピュータの開発が期待されており、宇宙と地上での応用が見込まれています。"),
+  Q("原子が極低温で示す現象は通常の物理法則とどう異なりますか？",["重力の影響がない","色が変わる","量子力学の法則に従う","目で見える"],2,"極低温では原子は量子力学の法則に従い、通常の物理法則では説明できない奇妙な振る舞いを示します。")]),
+
+A("m3","morning",
+"SpaceX Pursues Ambitious Plan to Build AI Data Centers in Orbit",
+"SpaceX and other companies are racing to establish data centers in space to harness abundant solar energy and meet soaring AI computing demands. While orbital facilities could solve Earth-based environmental challenges, significant technical hurdles including thermal management, radiation shielding, and orbital debris pose major obstacles to success.",
+"<p>The surge in artificial intelligence applications is driving unprecedented demand for computing power, prompting SpaceX and competitors to explore building data centers in space. Orbital facilities could leverage the abundant solar energy available beyond Earth's atmosphere and avoid many environmental challenges associated with ground-based data centers, such as water usage for cooling and energy grid strain.</p><p>However, space presents formidable engineering challenges for such operations. Thermal dissipation in the vacuum environment, protection against cosmic radiation and solar particles, regular maintenance requirements, and the growing threat of orbital debris all complicate the viability of space-based data infrastructure. Despite these obstacles, the potential benefits of unlimited clean energy access continue to drive innovation in this frontier technology. Source: <em>Artificial Intelligence News -- ScienceDaily, June 2026</em>.</p>",
+"ai","Artificial Intelligence News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260618041501.htm",
+"12 hours ago","June 28, 2026","https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&q=80",false,
+[V("Data Center","データセンター","データ処理施設","大規模なコンピュータ機器を集中管理し、膨大なデータ処理と情報保管を行う施設。AIの学習には特に多くの計算能力が必要。"),
+  V("Thermal Management","サーマルマネジメント","熱管理","コンピュータ機器が発生する熱を効率的に除去・冷却する技術。宇宙では放熱が地上より困難。"),
+  V("Orbital Debris","オービタルデブリ","宇宙ごみ","人工衛星や宇宙機が破壊・劣化して生じる破片。衝突によるカスケード現象で危険性が増加。"),
+  V("Solar Energy","ソーラーエネルギー","太陽光エネルギー","太陽から放射される光と熱を電気に変換するエネルギー源。宇宙では大気減衰がなく効率的。")],
+[Q("SpaceXが宇宙にデータセンターを建設したい主な理由は何か?",["地上の企業に対抗するため","豊富な太陽光エネルギーと環境課題の解決","宇宙飛行士の居住施設を作るため","軍事用途のため"],1,"宇宙のデータセンターは大気減衰のない太陽光を利用でき、地上の冷却水使用と電力消費の環境問題を回避できます。"),
+  Q("宇宙でのデータセンター運用における最大の課題は?",["インターネット速度が遅い","熱放散、放射線防護、メンテナンス、宇宙ごみ対策","宇宙飛行士が足りない","コストが安すぎる"],1,"宇宙の真空環境では熱を放散しにくく、放射線が強く、定期保守が困難で、軌道上のごみとの衝突リスクが高いです。"),
+  Q("宇宙でのサーマルマネジメントが地上と異なる理由は?",["重力がないため","真空では対流による冷却ができない","太陽が近い","電力が不足している"],1,"真空環境では空気がないため対流や伝導による冷却ができず、放射冷却のみに頼る必要があります。"),
+  Q("オービタルデブリの危険性が時間とともに増加する理由は?",["太陽の引力で加速する","衝突時のカスケード現象で破片が増殖する","宇宙塵が集積する","ブラックホールに吸い込まれている"],2,"一つの衝突で複数の破片が生じ、それらが新たな衝突を起こして指数関数的に増殖するカスケード現象が起きます。"),
+  Q("AIの急速な発展がこのプロジェクトを推進する最大の要因は何か?",["政府の命令","AIモデルの学習に必要な膨大な計算能力と電力需要","宇宙開発への予算増加","衛星通信の改善"],1,"最先端のAIモデル学習には莫大な計算リソースが必要で、地上の電力・冷却インフラでは対応限界に達しつつあります。")]),
+
+A("m4","morning",
+"Adaptive Brain Stimulation 2.0 Improves Parkinsonian Gait Through Precision Neuromodulation",
+"Two new studies demonstrate that adaptive neuromodulation can effectively treat Parkinsonian gait by delivering stimulation to the correct neural circuit at precisely the right moment. This breakthrough approach decomposes complex motor symptoms into targetable spatial and temporal components, offering a more personalized treatment strategy.",
+"<p>Researchers have shown that adaptive neuromodulation can significantly improve gait disturbances in Parkinson's disease by matching brain stimulation parameters to individual patient needs in real time. Rather than applying constant stimulation, the new 2.0 approach uses feedback mechanisms to deliver targeted pulses to specific neural circuits only when they are needed, addressing the underlying motor dysfunction more effectively than traditional deep brain stimulation methods.</p><p>These findings suggest that decomposing complex neurological symptoms into discrete spatial and temporal components enables clinicians to develop more precise therapeutic interventions. By matching stimulation to the right circuit at the right moment, this adaptive strategy could reduce side effects, improve patient outcomes, and provide a template for treating other movement disorders. Source: <em>Nature Medicine, June 2026</em>.</p>",
+"bio","Nature Medicine","https://www.nature.com/articles/s41591-026-04489-1",
+"5 hours ago","June 28, 2026","https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=900&q=80",false,
+[V("Adaptive neuromodulation","アダプティブ ニューロモジュレーション","適応的神経調節","患者の状態をリアルタイムで監視し、脳刺激のパラメータを自動的に調整する治療技術。"),
+  V("Parkinsonian gait","パーキンソニアン ゲイト","パーキンソン病歩行","パーキンソン病患者に見られる特徴的な歩行障害で、小刻み歩行や姿勢不安定が含まれる。"),
+  V("Deep brain stimulation","ディープ ブレイン スティミュレーション","深部脳刺激","脳の特定領域に電極を埋め込み、電気パルスを送って神経活動を調節する神経外科的治療法。"),
+  V("Neural circuit","ニューラル サーキット","神経回路","複数のニューロンが相互に接続して情報を処理・伝達するネットワーク構造。")],
+[Q("パーキンソン病歩行の改善に役立つ、この新しい脳刺激技術の主な特徴は何ですか？",["常に一定の刺激を与えること","患者の状態に合わせて刺激をリアルタイムで調整すること","すべての患者に同じパラメータを使うこと","刺激を段階的に減らしていくこと"],1,"適応的神経調節は、患者の状態をリアルタイムで監視し、刺激パラメータを動的に調整するため、より効果的で個別化された治療が可能になります。"),
+  Q("この研究が複雑な神経症状に対して提案する分解戦略の要素として、いずれが含まれていないか？",["空間的成分（どの脳回路か）","時間的成分（いつ刺激するか）","患者の年齢による分類","標的化可能な要素への分解"],2,"研究は症状を空間的（どの神経回路）と時間的（いつ）の成分に分解することに焦点を当てており、年齢による分類は主な戦略ではありません。"),
+  Q("従来の深部脳刺激と比べて、適応的神経調節がもたらす可能性のある利点は何ですか？",["手術の必要性をなくすこと","より多くの電力を必要とすること","副作用の削減と患者の転帰改善","刺激の強度を常に最大にすること"],2,"適応的なアプローチは、必要な時にのみ必要な強度で刺激を提供するため、副作用を減らし、治療効果を向上させる可能性があります。"),
+  Q("2026年6月に発表されたこの研究の出版社はどこですか？",["Science","The Lancet","Nature Medicine","Cell"],2,"この研究はNature Medicineに2026年6月にオンライン掲載されました。同誌は生医学研究の最高水準の学術誌です。"),
+  Q("パーキンソン病患者の治療において、患者の症状に『正しい回路に正しいタイミングで』刺激を届けることの意義は？",["すべての治療が同じ効果を持つようにすること","より個別化され有効な治療が可能になること","患者が脳刺激装置を自分で制御すること","医薬品を完全に置き換えることができること"],1,"適応的な空間的・時間的マッチングにより、各患者の神経的特性に合わせた精密治療が実現され、効果と安全性の向上が期待できます。")]),
+
+A("m5","morning",
+"Scientists Open Million-Year-Old Time Capsule Beneath New Zealand",
+"A New Zealand cave has yielded fossils from a lost ecosystem dating back approximately 1 million years, including a possible flying ancestor of the kākāpō parrot. The discovery demonstrates that volcanic activity and climate change were reshaping New Zealand's wildlife and driving extinctions long before human arrival.",
+"<p>Researchers excavating a cave system in New Zealand have uncovered a remarkable collection of fossils revealing an ancient ecosystem that thrived about 1 million years ago. Among the discoveries is a potential flying ancestor of the kākāpō, a flightless parrot endemic to New Zealand, along with other species that have since vanished from the fossil record. The findings provide crucial evidence of how natural processes shaped the country's biological heritage before human settlement.</p><p>The fossils reveal that volcanoes and climate upheaval were primary drivers of species extinctions and ecological transformation throughout New Zealand's deep history. This pre-human extinction record challenges assumptions about conservation and demonstrates that species loss is not solely a modern human phenomenon, though human impact has dramatically accelerated such changes. Source: <em>Climate News -- ScienceDaily, June 2026</em>.</p>",
+"earth","Climate News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260623011129.htm",
+"12 hours ago","June 28, 2026","https://images.unsplash.com/photo-1509909756405-be0199881695?w=900&q=80",false,
+[V("Fossil","フォッシル","化石","過去の生物の遺骨や遺跡が岩石に保存されたもの。地質時代の生命の証拠。"),
+  V("Ecosystem","エコシステム","生態系","生物とその環境が相互に影響し合う統合されたシステム。"),
+  V("Volcanic activity","ボルケーニック・アクティビティ","火山活動","火山からのマグマ、ガス、灰の放出。地形と気候に大きな影響を与える。"),
+  V("Extinction","イクスティンクション","絶滅","種が完全に消滅する現象。自然原因または人為的原因で起こる。")],
+[Q("ニュージーランドの洞窟から発見された化石の年代はおよそいつ頃ですか？",["50万年前","100万年前","200万年前","300万年前"],1,"化石は約100万年前の失われた生態系から発見されました。"),
+  Q("発見された化石の中で特に注目されているのは何ですか？",["恐竜の骨","カカポの飛行能力を持つ祖先","海洋生物の遺骨","人類の遺跡"],1,"飛行能力を持つカカポの祖先の化石は、進化を理解する上で重要な発見です。"),
+  Q("この研究が示している、人類到来前の生物絶滅の主な原因は何ですか？",["隕石衝突","火山活動と気候変動","海面変化のみ","氷河期"],1,"火山活動と気候の激変が、人類到来前からニュージーランドの野生動物を再形成し、絶滅を引き起こしていました。"),
+  Q("カカポの飛行能力を持つ祖先が存在したことは、何についての理解を深めますか？",["気候変動の速度","種の進化と適応","火山噴火の周期","海洋生物の多様性"],1,"飛行能力から非飛行へと進化した過程は、環境適応と種分化の重要な例です。"),
+  Q("この発見が人間社会にもたらす重要な示唆は何ですか？",["絶滅は現代人だけの責任である","自然の絶滅プロセスは存在しないこと","種の消失は人為的影響を加速させたが、自然でも起こること","火山活動のみが絶滅を引き起こすこと"],2,"人類到来前の絶滅記録は、現代の急速な種消失が人間により加速されていることを示しています。")])
+];
+/*MORNING_END*/
+
+/*EVENING_START*/
+const EVENING=[
+A("e1","evening",
+"NASA Tests New Refuel Device for Future In-Space Refueling Missions",
+"NASA has developed a specialized refueling device that will enable spacecraft to refuel in Earth orbit before embarking on deep space exploration missions. This technology is critical for supporting humanity's next generation of ambitious missions throughout the solar system.",
+"<p>NASA engineers have successfully tested an innovative refueling device designed to transfer propellant between spacecraft in orbit. Similar to how a gas pump nozzle fits precisely into a vehicle's fuel tank, this specialized apparatus ensures safe and efficient fuel transfer in the microgravity environment of space. The device represents a major breakthrough in supporting extended deep space missions that require multiple spacecraft or additional fuel supplies before departure.</p><p>The ability to refuel spacecraft in orbit will revolutionize mission planning and extend the range of future exploration missions. By allowing vehicles to top off their tanks in Earth orbit, NASA can reduce launch mass requirements, decrease costs, and enable more ambitious scientific objectives throughout the solar system. This capability is essential for upcoming missions to the Moon, Mars, and beyond. Source: <em>NASA, June 2026</em>.</p>",
+"space","NASA","https://www.nasa.gov/directorates/stmd/tech-demo-missions-program/cryogenic-fluid-management-cfm/nasa-tests-new-refuel-device-for-future-in-space-refueling-missions/",
+"7 hours ago","June 28, 2026","https://www.nasa.gov/wp-content/uploads/2026/06/msfc-ar-cryocoupler-testing-video-b.mp4",true,
+[V("In-Space Refueling","インスペース リフューエリング","宇宙での給油","宇宙空間で衛星や宇宙船に燃料を供給する技術。軌道上での燃料移送により、長距離ミッションが可能になる。"),
+  V("Propellant","プロペラント","推進剤","ロケットや宇宙船を動かすための燃料。液体または固体の形態で、燃焼時の推力を生み出す。"),
+  V("Microgravity","マイクログラビティ","微小重力","宇宙空間でほぼ重力が働かない状態。液体の燃料移送にも特別な技術が必要になる。"),
+  V("Deep Space Exploration","ディープスペース エクスプロレーション","深宇宙探査","月や火星、太陽系全体への長距離の宇宙探査ミッション。燃料補給能力が重要な要素。")],
+[Q("Why is the specialized refueling device similar to a gas pump nozzle?",["It creates electricity for the spacecraft","It must fit precisely to transfer fuel safely between spacecraft","It reduces the weight of the spacecraft","It increases the speed of the spacecraft"],1,"ガスポンプのノズルと同様に、専用の給油装置は宇宙船同士の燃料転送を安全かつ正確に行うために設計されています。"),
+  Q("What is the primary advantage of in-space refueling for future missions?",["It eliminates the need for astronauts on missions","It allows spacecraft to carry more scientific equipment by reducing initial fuel load","It makes space travel faster than light","It removes the need for rocket engines"],1,"軌道上での給油により、宇宙船は初期段階で必要な燃料を減らし、その分科学機器を増やすことができます。"),
+  Q("In what environment does the refueling device operate?",["Earth's atmosphere","Microgravity in space","On the Moon's surface","Inside the spacecraft cabin"],1,"給油装置は微小重力の宇宙空間で動作するため、地上の給油とは異なる特別な技術が必要です。"),
+  Q("Which type of deep space destinations could benefit from in-space refueling capability?",["Only near-Earth asteroids","The Moon, Mars, and beyond throughout the solar system","Only satellites in low Earth orbit","Only Earth's immediate atmosphere"],1,"軌道上給油は月、火星、そして太陽系全体への野心的なミッションを支援する能力を提供します。"),
+  Q("How does in-space refueling reduce mission costs?",["By eliminating all spacecraft fuel needs","By allowing lower initial launch mass and reducing the number of rockets needed","By preventing space debris creation","By using renewable energy sources"],1,"打ち上げ初期質量を減らすことで、必要なロケットの数や規模を削減でき、ミッション総コストが低下します。")]),
+
+A("e2","evening",
+"Brain-inspired chip operates near absolute zero, promising quantum computing breakthrough",
+"Researchers at the University of Hong Kong have developed an innovative brain-inspired chip capable of functioning just above absolute zero by repurposing a silicon carbide transistor to mimic energy-efficient neurons. This breakthrough could revolutionize quantum computing by enabling devices that operate in extreme cold environments while mimicking biological neural firing patterns.",
+"<p>Scientists at the University of Hong Kong created a remarkable new type of brain-inspired chip that can function just above absolute zero, one of the coldest environments imaginable. By using a standard silicon carbide transistor in a completely new way, the team made a single device behave like an energy-efficient neuron, firing electrical spikes similar to those found in the human brain.</p><p>This achievement has significant implications for quantum computing development, as it demonstrates how biological principles can be integrated with semiconductor technology to create more efficient computing systems that operate at cryogenic temperatures. The ability to run brain-inspired chips in such extreme conditions opens new pathways for developing quantum computers with improved energy efficiency and performance. Source: <em>Artificial Intelligence News -- ScienceDaily, June 2026</em>.</p>",
+"ai","Artificial Intelligence News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260612032024.htm",
+"11 hours ago","June 28, 2026","https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=900&q=80",false,
+[V("silicon carbide transistor","シリコンカーバイドトランジスタ","炭化ケイ素製晶体管","高温・極低温環境に強い半導体素子。従来のシリコンより優れた特性を持つ。"),
+  V("absolute zero","アブソリュートゼロ","絶対零度","摂氏マイナス273.15度。物質の分子運動が理論上停止する最低温度。"),
+  V("quantum computing","クォンタムコンピューティング","量子コンピュータ","量子力学の原理を利用した高速計算機。従来型より指数関数的に高速処理可能。"),
+  V("neuromorphic","ニューロモルフィック","脳型","生物の脳の構造と機能を模倣した電子システムの設計原理。")],
+[Q("ホンコン大学が開発したチップの主な特徴は何か？",["シリコンチップを従来の方法で改良した","標準的なシリコンカーバイドトランジスタを新しい方法で使用して神経細胞のように機能させた","新しい材料から完全に新規開発された","脳組織を直接使用した生物チップである"],1,"研究チームは既存のシリコンカーバイドトランジスタを革新的な方法で利用し、エネルギー効率の高い神経細胞のようなスパイク発火を実現しました。"),
+  Q("このチップがどのような環境で機能することが重要か？",["常温環境","高温環境","絶対零度直上の極低温環境","水中環境"],2,"チップは絶対零度（摂氏マイナス273.15度）直上という極めて低い温度で機能します。これは量子コンピュータの実装に重要です。"),
+  Q("このチップの開発が量子コンピュータにもたらす可能性は？",["消費電力を増加させる","エネルギー効率と性能の向上","計算速度の低下","必要な冷却システムの廃止"],1,"脳を模倣した設計により、極低温で動作する量子コンピュータのエネルギー効率と全体的な性能が向上する可能性があります。"),
+  Q("シリコンカーバイドがこの用途に適している理由は？",["通常のシリコンより安い","高温と極低温環境に強い特性を持つ","光を発することができる","生物と直接相互作用できる"],1,"シリコンカーバイドは極端な温度変化に強いため、量子コンピュータが必要とする極低温環境での使用に最適です。"),
+  Q("このチップが模倣する生物学的プロセスは？",["筋肉の収縮","心臓の鼓動","神経細胞のスパイク発火","呼吸作用"],2,"チップは人間の脳の神経細胞がスパイク状の電気信号を発火させるメカニズムを模倣しており、これが脳型コンピュータの基本原理です。")]),
+
+A("e3","evening",
+"Virtual Reality Combined with Neurostimulation Accelerates Upper-Limb Recovery After Stroke",
+"A multimodal platform integrating immersive virtual reality with synchronized sensory neurostimulation achieved superior motor gains in chronic stroke patients compared to conventional rehabilitation. The treatment restored body awareness and improved tactile sensation while enabling precise tracking of recovery through kinematic analysis.",
+"<p>Researchers tested a novel rehabilitation approach that merges immersive virtual reality with synchronous neurostimulation in individuals with chronic stroke. The multimodal platform delivered significant improvements in upper-limb motor function, restored the brain's body representation, and enhanced tactile sensitivity. The system also provided objective kinematic measurements of recovery progress, offering clinicians detailed data on patient improvement trajectories.</p><p>These findings suggest that combining sensory stimulation with engaging virtual environments creates a more powerful rehabilitation stimulus than traditional physical therapy alone. This integrated approach may help chronic stroke patients—who often plateau in recovery with standard treatment—regain functional movement and sensorimotor abilities, potentially opening new pathways for neural plasticity and motor learning. Source: <em>Nature Medicine, June 2026</em>.</p>",
+"bio","Nature Medicine","https://www.nature.com/articles/s41591-026-04486-4",
+"2 hours ago","June 28, 2026","https://images.unsplash.com/photo-1576319155264-99536e0be1ee?w=900&q=80",false,
+[V("Virtual Reality","バーチャルリアリティ","仮想現実","コンピュータにより生成された3次元環境で、ユーザーが没入的に体験できる技術。脳卒中リハビリでは動機付けと運動学習を促進します。"),
+  V("Neurostimulation","ニューロスティミュレーション","神経刺激","電気的または磁気的刺激により神経系を活性化する治療技術。感覚情報処理と運動復帰を支援します。"),
+  V("Motor Recovery","モーターリカバリー","運動機能回復","脳卒中後に脳の可塑性を活用して、失われた運動能力を取り戻すプロセス。リハビリにより神経回路が再構成されます。"),
+  V("Body Representation","ボディレプレゼンテーション","身体表現","脳が自分の身体の位置や形を認識する機能。脳卒中で障害され、仮想環実験で改善されました。")],
+[Q("この研究で使用された治療法は何を組み合わせましたか？",["仮想現実と同期的神経刺激","物理療法と薬物治療","手術と従来のリハビリ","電気療法のみ"],0,"この研究は没入型仮想現実と同期的感覚神経刺激を組み合わせた新しいマルチモーダルプラットフォームを開発しました。"),
+  Q("研究対象となったのはどのタイプの脳卒中患者ですか？",["急性期患者のみ","慢性期患者","完全に回復した患者","症状のない患者"],1,"慢性脳卒中患者が対象でした。従来のリハビリではプラトーに達した患者でも改善がみられました。"),
+  Q("この治療で改善された機能は？",["視覚機能のみ","上肢運動機能、身体表現、触覚敏感性","聴覚処理","言語機能"],2,"上肢の運動機能、身体認識の回復、触覚感度の向上という複数の機能が改善されました。"),
+  Q("この新しい治療法は従来のリハビリと比べてどうでしたか？",["同等の効果","効果が劣る","より優れた成績","効果なし"],2,"このマルチモーダルプラットフォームは従来の理学療法を上回る運動機能の改善をもたらしました。"),
+  Q("研究が提供した重要な利点は何ですか？",["低コストのみ","客観的な運動学的追跡により回復を正確に測定できること","患者の快適さのみ","投薬削減のみ"],1,"このシステムは客観的な運動学的測定により、臨床医が患者の回復過程を詳細に追跡・分析できるようにしました。")]),
+
+A("e4","evening",
+"Hidden geological process offsets carbon emissions from thawing permafrost",
+"Scientists discovered that thawing permafrost can trigger increased rock weathering, a natural process that absorbs CO2 from the atmosphere. In certain regions, this carbon uptake was sufficient to completely offset or even exceed river greenhouse gas emissions from permafrost degradation.",
+"<p>Researchers have identified a previously underappreciated geological mechanism at work in thawing permafrost regions. As frozen ground thaws due to climate change, it accelerates rock weathering—a chemical process where minerals in rocks dissolve and react with atmospheric CO2. This weathering process effectively removes carbon dioxide from the air and locks it into dissolved forms carried by rivers. The study found that in some areas, the carbon dioxide absorbed through enhanced rock weathering was substantial enough to fully compensate for greenhouse gas emissions released directly from thawing permafrost.</p><p>These findings suggest that natural feedback mechanisms may partially mitigate some climate impacts in permafrost regions, though scientists caution that this offset is geographically variable and should not reduce urgency in addressing overall climate change. The discovery adds complexity to carbon cycle models and highlights the importance of understanding Earth's interconnected geological and biological processes. Source: <em>Climate News -- ScienceDaily, June 2026</em>.</p>",
+"earth","Climate News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260619101343.htm",
+"5 hours ago","June 28, 2026","https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=900&q=80",false,
+[V("permafrost","パーマフロスト","永久凍土","年間を通じて摂氏0度以下に保たれた土壌。主に高緯度地域に分布し、気候変動の影響を受けやすい。"),
+  V("rock weathering","ロックウェザリング","岩石風化","化学反応により岩石の鉱物が溶解・変質する過程。CO2を大気から吸収し固定する。"),
+  V("carbon sequestration","カーボンシークエストレーション","炭素隔離","大気中のCO2を長期間にわたり固定・貯蔵する自然的または人工的プロセス。"),
+  V("greenhouse gas emissions","グリーンハウスガスエミッション","温室効果ガス排出","CO2やメタンなど地球温暖化を促進するガスが大気に放出されること。")],
+[Q("What geological process was found to absorb CO2 in thawing permafrost regions?",["Soil erosion","Rock weathering","Vegetation decomposition","Glacier melting"],1,"岩石風化は鉱物が化学反応によって溶解し、大気中のCO2を吸収する自然プロセスです。"),
+  Q("In some regions studied, what effect did rock weathering have on permafrost emissions?",["It increased emissions","It partially reduced emissions","It completely offset or exceeded emissions","It had no effect"],2,"研究では、岩石風化によるCO2吸収が永久凍土由来の排出を完全に相殺、または上回る地域もありました。"),
+  Q("Which of the following best describes why rock weathering removes CO2 from the atmosphere?",["Plants absorb it during photosynthesis","Minerals dissolve and chemically bind CO2","Rocks physically trap gas in pores","Ocean currents carry it away"],1,"岩石内の鉱物がCO2と反応して化学変化し、炭素が長期間固定されます。"),
+  Q("What does this discovery suggest about climate feedback mechanisms?",["All feedback mechanisms accelerate warming","Natural processes cannot help mitigate climate change","Some natural geological processes may partially offset certain climate impacts","Rock weathering is the primary solution to climate change"],2,"この発見は自然の地質学的プロセスが気候変動の一部を部分的に緩和する可能性を示唆しています。"),
+  Q("Why should this geological offset NOT reduce urgency in addressing climate change?",["The offset is geographically uniform everywhere","It completely solves the problem","The offset is geographically variable and not sufficient globally","Rock weathering creates other environmental problems"],2,"この相殺効果は地域によってばらつきがあり、全球的な気候変動対策の必要性を変えません。")]),
+
+A("e5","evening",
+"Einstein's \"biggest blunder\" may finally have an explanation",
+"Scientists have discovered a surprising connection between quantum gravity and exotic quantum states of matter that could explain why the universe isn't expanding at runaway speeds. The research suggests that spacetime geometry itself may shield the cosmological constant from destructive quantum effects.",
+"<p>Researchers have uncovered a novel mechanism linking quantum gravity to a peculiar quantum state of matter, potentially resolving one of cosmology's greatest mysteries. By examining how spacetime's fundamental geometry interacts with quantum fields, the team found that the shape of spacetime may naturally protect the cosmological constant from the enormous quantum fluctuations that would otherwise cause catastrophic expansion. This connection between exotic matter states and gravitational geometry provides a fresh perspective on why our universe expands at a measured, observable rate rather than tearing itself apart.</p><p>The implications are profound for fundamental physics. If confirmed, this mechanism could reconcile quantum mechanics with general relativity while explaining the universe's accelerating expansion—Einstein's \"biggest blunder,\" the cosmological constant he introduced and later rejected, may actually represent a deep truth about nature's architecture. Source: <em>Quantum Physics News -- ScienceDaily, June 2026</em>.</p>",
+"quantum","Quantum Physics News -- ScienceDaily","https://www.sciencedaily.com/releases/2026/06/260619020516.htm",
+"7 hours ago","June 28, 2026","https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=900&q=80",false,
+[V("cosmological constant","コスモロジカル・コンスタント","宇宙定数","空間の膨張を司る物理定数。真空のエネルギー密度として働き、宇宙の加速膨張を説明する。"),
+  V("quantum gravity","クォンタム・グラヴィティ","量子重力","重力を量子力学で記述する理論。プランク尺度での物理現象を説明する基礎物理学。"),
+  V("spacetime","スペースタイム","時空","空間と時間を統一した4次元の幾何学的構造。一般相対性理論の基本概念。"),
+  V("quantum fluctuations","クォンタム・フルクチュエーション","量子ゆらぎ","量子力学により不確定性原理から生じる一時的なエネルギーの変動現象。")],
+[Q("エインシュタインが導入した\"最大の誤り\"と呼ばれるものは何ですか?",["暗黒物質","宇宙定数","ダークエネルギー","相対性理論"],1,"宇宙定数は、エインシュタインが宇宙モデルを調整するため導入しましたが、後に撤回を望みました。実は宇宙の加速膨張を説明するために重要です。"),
+  Q("今回の研究が発見した主な接続関係は何ですか?",["量子重力と通常の物質","量子重力と exotic な量子状態","重力波と光","ダークマターと通常物質"],1,"研究者たちは量子重力と exotic な量子状態の間の新しい関係を発見し、それが宇宙定数を保護する仕組みを説明します。"),
+  Q("時空の幾何学が宇宙定数をどのように保護するのですか?",["量子ゆらぎを増幅する","量子ゆらぎから遮蔽する","宇宙膨張を停止させる","光速を変える"],1,"研究によると、時空自体の形状が宇宙定数を量子効果の破壊的な影響から自然に守るメカニズムがあります。"),
+  Q("この研究の重要性は何ですか?",["新しい粒子の発見","量子力学と一般相対性理論の調和","光速の変動の証明","ブラックホールの消滅"],1,"この研究は量子力学と一般相対性理論の統一を進め、宇宙の加速膨張という観測事実を説明する基礎を提供します。"),
+  Q("宇宙が\"暴走的に\"膨張しないのはなぜですか?",["ダークマターが押さえている","時空の形状が宇宙定数を保護している","重力波が減速させている","光が膨張を止めている"],1,"今回の研究により、時空そのものの幾何学的性質が宇宙定数を量子ゆらぎから守り、測定可能な膨張速度を維持していることが示唆されました。")])
+];
+/*EVENING_END*/
+
+const ALL_NEWS=[...MORNING,...EVENING];
+
+/* ── ARCHIVE ── */
+function loadArc(){try{return JSON.parse(localStorage.getItem('cosmos_arc')||'{}')}catch(e){return{}}}
+function saveArc(a){try{localStorage.setItem('cosmos_arc',JSON.stringify(a))}catch(e){}}
+function addToArc(articles,key){
+  const a=loadArc();
+  if(!a[key]){
+    a[key]={ts:new Date().toISOString(),articles};
+    const keys=Object.keys(a).sort();
+    if(keys.length>30)delete a[keys[0]];
+    saveArc(a);
+  }
+}
+function getArcAll(){
+  const a=loadArc();
+  const cur=new Set(ALL_NEWS.map(x=>x.id));
+  const old=Object.values(a).flatMap(e=>e.articles||[]).filter(x=>!cur.has(x.id));
+  return[...ALL_NEWS,...old];
+}
+
+/* ── FAVORITES ── */
+function loadFavs(){try{return JSON.parse(localStorage.getItem('cosmos_favs')||'[]')}catch(e){return[]}}
+function saveFavs(f){try{localStorage.setItem('cosmos_favs',JSON.stringify(f))}catch(e){}}
+function isFaved(id){return loadFavs().some(f=>f.id===id)}
+function toggleFav(art){
+  let f=loadFavs();
+  const i=f.findIndex(x=>x.id===art.id);
+  if(i>=0)f.splice(i,1);
+  else f.unshift({id:art.id,title:art.title,src:art.src,img:art.img,cat:art.cat,date:art.date});
+  saveFavs(f);refreshFavUI();
+}
+
+/* ── EDITION ── */
+function edInfo(){
+  const now=new Date(),h=now.getHours();
+  const isMorn=h>=6&&h<18;
+  const key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${isMorn?'m':'e'}`;
+  const next=new Date(now);
+  let edStart;
+  if(isMorn){
+    next.setHours(18,0,0,0);
+    edStart=new Date(now.getFullYear(),now.getMonth(),now.getDate(),6,0,0,0);
+  }else if(h>=18){
+    next.setDate(next.getDate()+1);next.setHours(6,0,0,0);
+    edStart=new Date(now.getFullYear(),now.getMonth(),now.getDate(),18,0,0,0);
+  }else{
+    next.setHours(6,0,0,0);
+    edStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()-1,18,0,0,0);
+  }
+  const totalMs=next-edStart;
+  const elapsed=Math.max(0,now-edStart);
+  const pct=Math.min(100,(elapsed/Math.max(1,totalMs))*100);
+  return{isMorn,key,next,pct,arts:isMorn?MORNING:EVENING};
+}
+
+/* ── STATE ── */
+let activeCat='all',openArt=null,qState={idx:0,score:0,answered:false},ED=edInfo();
+let arcMode={active:false,key:null,arts:[]};
+
+/* ── TABS ── */
+function renderTabs(){
+  const w=document.getElementById('tabs');w.innerHTML='';
+  const arts=arcMode.active?arcMode.arts:ED.arts;
+  CATS.forEach(c=>{
+    const n=c.id==='all'?arts.length:arts.filter(a=>a.cat===c.id).length;
+    const b=document.createElement('button');
+    b.className='tab'+(activeCat===c.id?' active':'');
+    b.setAttribute('role','tab');
+    b.innerHTML=`${c.i} ${c.l} <span class="tab-n">${n}</span>`;
+    b.onclick=()=>{activeCat=c.id;renderTabs();renderGrid()};
+    w.appendChild(b);
+  });
+}
+
+/* ── GRID ── */
+function renderGrid(){
+  const g=document.getElementById('grid');
+  const arts=arcMode.active?arcMode.arts:ED.arts;
+  const filt=activeCat==='all'?arts:arts.filter(a=>a.cat===activeCat);
+  g.innerHTML='';
+  if(!filt.length){
+    g.innerHTML='<div class="empty-state"><span>◎</span>No articles in this category.</div>';return;
+  }
+  filt.forEach((a,i)=>{
+    const isFeat=a.feat&&activeCat==='all'&&i===0;
+    const isSec=!isFeat&&activeCat==='all'&&i===1;
+    const el=document.createElement('article');
+    el.className='card '+(isFeat?'cf':isSec?'cs':'cn');
+    el.setAttribute('role','listitem');el.setAttribute('tabindex','0');
+    const faved=isFaved(a.id);
+    el.innerHTML=`<div class="ciw">
+      <img class="cimg" src="${a.img}" alt="" loading="lazy">
+      <div class="iovl"></div>
+      <button class="cfav${faved?' active':''}" data-id="${a.id}" title="お気に入り" aria-label="Favorite">${faved?'★':'☆'}</button>
+    </div>
+    <div class="cbody">
+      <div class="cmeta">
+        <span class="ccat ${CC[a.cat]}">${CL[a.cat]}</span>
+        <span class="ctime">${a.time}</span>
+      </div>
+      <h2 class="ctitle">${a.title}</h2>
+      ${isFeat||isSec?`<p class="cexc">${a.excerpt}</p>`:''}
+      <div class="cfoot">
+        <span class="csrc"><span class="sdot"></span>${a.src}</span>
+        <span class="cmore">Read more →</span>
+      </div>
+    </div>`;
+    el.querySelector('.cfav').addEventListener('click',ev=>{
+      ev.stopPropagation();toggleFav(a);
+      const b=ev.currentTarget;const nf=isFaved(a.id);
+      b.textContent=nf?'★':'☆';b.classList.toggle('active',nf);
+    });
+    el.addEventListener('click',()=>openModal(a));
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openModal(a)});
+    g.appendChild(el);
+  });
+  const arcAll=getArcAll();
+  document.getElementById('st-today').textContent=filt.length;
+  document.getElementById('st-arc').textContent=arcAll.length;
+  document.getElementById('sb-cnt').textContent=ED.arts.length+'件';
+  document.getElementById('sb-atot').textContent=arcAll.length+'件';
+  document.getElementById('sb-asess').textContent=Object.keys(loadArc()).length+'回';
+}
+
+/* ── VOCAB ── */
+function renderVocab(a){
+  document.getElementById('vgrid').innerHTML=a.vocab.map(v=>`
+    <div class="vitem" data-term="${v.term}" data-ja="${v.ja}" data-desc="${v.desc}">
+      <span class="kh">📒 Keep</span>
+      <div class="vterm">${v.term}</div>
+      <div class="vread">${v.r}</div>
+      <div class="vja">${v.ja}</div>
+      <div class="vdesc">${v.desc}</div>
+    </div>`).join('');
+  document.getElementById('vgrid').querySelectorAll('.vitem').forEach(el=>{
+    el.addEventListener('click',()=>keepOpen(el.dataset.term,el.dataset.ja,el.dataset.desc));
+  });
+}
+
+/* ── KEEP ── */
+function keepOpen(term,ja,desc){
+  const title=`🔬 ${term} — ${ja}`;
+  const body=`${term}（${ja}）\n\n${desc}\n\n📱 Cosmos Science News`;
+  window.open(`https://keep.google.com/#NOTE&title=${encodeURIComponent(title)}&text=${encodeURIComponent(body)}`,'_blank','width=500,height=600,noopener');
+  toast(`📒 "${term}" を Google Keep で開きました`);
+}
+function keepAll(a){
+  const title=`🔬 Cosmos用語集: ${a.title.substring(0,40)}...`;
+  const body=a.vocab.map(v=>`• ${v.term}（${v.ja}）\n  ${v.desc}`).join('\n\n')+'\n\n📱 Cosmos Science News';
+  window.open(`https://keep.google.com/#NOTE&title=${encodeURIComponent(title)}&text=${encodeURIComponent(body)}`,'_blank','width=500,height=700,noopener');
+  toast('📒 全用語を Google Keep で開きました');
+}
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ── QUIZ ── */
+function renderQuiz(a){qState={idx:0,score:0,answered:false};renderQ(a);}
+function renderQ(a){
+  const qs=a.quiz,tot=qs.length,{idx,score}=qState;
+  const dots=qs.map((_,i)=>`<div class="qdot${i<idx?' done':i===idx?' cur':''}"></div>`).join('');
+  const opts=qs[idx].opts.map((o,i)=>`<button class="qopt" data-i="${i}" onclick="ansQ(${i},${qs[idx].ans},\`${qs[idx].fb.replace(/`/g,"'")}\`)">
+    <span class="ql">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`).join('');
+  document.getElementById('qpanel').innerHTML=`
+    <div class="qhead">
+      <span class="qhtxt">問 ${idx+1} / ${tot}</span>
+      <div class="qprog"><div class="qdots">${dots}</div><span class="qscr">${score}/${tot}</span></div>
+    </div>
+    <p class="qq">${qs[idx].q}</p>
+    <div class="qopts">${opts}</div>
+    <div class="qfb" id="qfb"></div>
+    <div class="qnav"><button class="qnext" id="qnext" onclick="nextQ()">
+      ${idx+1<tot?'次の問題 →':'結果を見る →'}
+    </button></div>`;
+  window._qa=a;
+}
+function ansQ(chosen,correct,fb){
+  if(qState.answered)return;qState.answered=true;
+  if(chosen===correct)qState.score++;
+  document.querySelectorAll('.qopt').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===correct)b.classList.add('correct');
+    else if(i===chosen&&chosen!==correct)b.classList.add('wrong');
+  });
+  const f=document.getElementById('qfb');
+  f.innerHTML=`<strong>${chosen===correct?'✓ 正解！':'✗ 不正解'}</strong> ${fb}`;
+  f.classList.add('show');
+  document.getElementById('qnext').classList.add('show');
+}
+function nextQ(){
+  qState.idx++;qState.answered=false;
+  if(qState.idx>=window._qa.quiz.length)showRes();else renderQ(window._qa);
+}
+function showRes(){
+  const{score}=qState,tot=window._qa.quiz.length,pct=Math.round(score/tot*100);
+  const msgs=['📚 記事をもう一度読み返してみましょう！','👍 基礎は理解できています。','🌟 なかなか素晴らしい！','🏆 この分野の内容をよく把握しています！','💎 満点！科学的理解力が際立っています！'];
+  const mi=pct<40?0:pct<60?1:pct<80?2:pct<100?3:4;
+  document.getElementById('qpanel').innerHTML=`<div class="qres show">
+    <div class="qrscore">${score}/${tot}</div>
+    <div class="qrlabel">${pct}% 正解</div>
+    <div class="qrmsg">${msgs[mi]}</div>
+    <button class="qretry" onclick="renderQuiz(window._qa)">もう一度チャレンジ →</button>
+  </div>`;
+}
+
+/* ── MODAL ── */
+function openModal(a){
+  openArt=a;window._qa=a;
+  document.getElementById('mimg').src=a.img;
+  document.getElementById('mimg').alt=a.title;
+  document.getElementById('mtitle').textContent=a.title;
+  document.getElementById('msrc').textContent=a.src;
+  document.getElementById('mdate').textContent=a.date;
+  document.getElementById('mbody').innerHTML=a.body;
+  document.getElementById('mtags').innerHTML=`<span class="ccat ${CC[a.cat]}">${CL[a.cat]}</span>`;
+  document.getElementById('alink').href=a.url;
+  const fb=document.getElementById('mfav');
+  fb.textContent=isFaved(a.id)?'★':'☆';
+  fb.classList.toggle('active',isFaved(a.id));
+  fb.onclick=()=>{toggleFav(a);const nf=isFaved(a.id);fb.textContent=nf?'★':'☆';fb.classList.toggle('active',nf);};
+  document.getElementById('keepAll').onclick=()=>keepAll(a);
+  renderVocab(a);renderQuiz(a);
+  const o=document.getElementById('movl');o.classList.add('open');
+  document.body.style.overflow='hidden';o.scrollTop=0;
+  document.getElementById('mclose').focus();
+}
+function closeMod(){
+  document.getElementById('movl').classList.remove('open');
+  document.body.style.overflow='';openArt=null;
+}
+document.getElementById('mclose').addEventListener('click',closeMod);
+document.getElementById('movl').addEventListener('click',e=>{if(e.target===document.getElementById('movl'))closeMod()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openArt)closeMod()});
+
+/* ── FAVORITES PANEL ── */
+function refreshFavUI(){
+  const favs=loadFavs();
+  const badge=document.getElementById('favBadge');
+  const fb=document.getElementById('favBtn');
+  badge.textContent=favs.length;badge.classList.toggle('show',favs.length>0);
+  const txtNode=Array.from(fb.childNodes).find(n=>n.nodeType===3);
+  if(txtNode)txtNode.nodeValue=favs.length?'★':'☆';
+  // sidebar
+  const sb=document.getElementById('sbf');
+  sb.innerHTML=favs.length?favs.slice(0,5).map(f=>`
+    <div class="sb-fav-item" data-id="${f.id}">
+      <div class="sb-fav-dot"></div>
+      <div class="sb-fav-title">${f.title}</div>
+    </div>`).join(''):'<div class="sb-empty">まだお気に入りがありません</div>';
+  sb.querySelectorAll('.sb-fav-item').forEach(el=>{
+    el.addEventListener('click',()=>{const a=getArcAll().find(x=>x.id===el.dataset.id);if(a)openModal(a)});
+  });
+  // panel body
+  const pb=document.getElementById('fpb');
+  pb.innerHTML=favs.length?favs.map(f=>`
+    <div class="fp-item" data-id="${f.id}">
+      <img class="fp-img" src="${f.img}" alt="" loading="lazy">
+      <div style="flex:1;min-width:0">
+        <div class="fp-title">${f.title}</div>
+        <div class="fp-meta">${f.src} · ${f.date}</div>
+      </div>
+      <button class="fp-rm" data-id="${f.id}" title="削除">✕</button>
+    </div>`).join(''):'<div class="fp-empty">⭐ まだお気に入りがありません<br>カードの ☆ をタップして追加できます</div>';
+  pb.querySelectorAll('.fp-item').forEach(el=>{
+    el.addEventListener('click',e=>{if(e.target.classList.contains('fp-rm'))return;
+      const a=getArcAll().find(x=>x.id===el.dataset.id);if(a){closeFP();openModal(a)}});
+  });
+  pb.querySelectorAll('.fp-rm').forEach(b=>{
+    b.addEventListener('click',e=>{e.stopPropagation();const a=getArcAll().find(x=>x.id===b.dataset.id);if(a)toggleFav(a)});
+  });
+}
+function openFP(){refreshFavUI();document.getElementById('fpovl').classList.add('open');document.getElementById('fpp').classList.add('open');document.body.style.overflow='hidden';}
+function closeFP(){document.getElementById('fpovl').classList.remove('open');document.getElementById('fpp').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('favBtn').addEventListener('click',openFP);
+document.getElementById('fpc').addEventListener('click',closeFP);
+document.getElementById('fpovl').addEventListener('click',closeFP);
+
+/* ── SEARCH ── */
+const SI=document.getElementById('si'),SC=document.getElementById('sc');
+let stimer=null;
+SI.addEventListener('input',()=>{
+  SC.classList.toggle('show',!!SI.value);
+  clearTimeout(stimer);
+  if(!SI.value.trim()){document.getElementById('srp').classList.remove('show');return;}
+  stimer=setTimeout(()=>doSearch(SI.value.trim()),500);
+});
+SI.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch(SI.value.trim())});
+SC.addEventListener('click',()=>{SI.value='';SC.classList.remove('show');document.getElementById('srp').classList.remove('show');});
+document.getElementById('srp-close').addEventListener('click',()=>{document.getElementById('srp').classList.remove('show');SI.value='';SC.classList.remove('show');});
+
+const SYNONYMS={
+  'ゲノム':['genome','crispr','gene','editing','dna','prime','hbb','sickle'],
+  '編集':['editing','crispr','prime','gene'],
+  '宇宙':['space','astronomy','nasa','star','planet','telescope','jwst','webb'],
+  '量子':['quantum','qubit','bose','einstein','picokelvin','interferometry'],
+  'ai':['artificial','intelligence','neural','machine','learning','raven','robin'],
+  '気候':['climate','ice','co2','carbon','warming','glacial','precipitation'],
+  '医学':['medicine','clinical','trial','therapy','disease','diabetes','stem'],
+  '惑星':['planet','exoplanet','orbit','kuiper','neptune'],
+  '太陽':['solar','sun','geomagnetic','storm','helio'],
+  '糖尿病':['diabetes','insulin','islet','pancreatic','stem'],
+  '鎌状':['sickle','hbb','prime','editing','crispr'],
+};
+function doSearch(q){
+  if(!q)return;
+  const all=getArcAll();
+  const terms=q.toLowerCase().replace(/[「」『』。、？！]/g,' ').split(/\s+/).filter(Boolean);
+  const scored=all.map(a=>{
+    const txt=(a.title+' '+a.excerpt+' '+(a.body||'')+' '+a.cat+' '+(a.vocab||[]).map(v=>v.term+' '+v.ja+' '+v.desc).join(' ')).toLowerCase();
+    let s=0;
+    terms.forEach(t=>{
+      s+=(txt.match(new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'))||[]).length*3;
+      if(a.title.toLowerCase().includes(t))s+=10;
+      if(a.cat===t)s+=8;
+    });
+    Object.entries(SYNONYMS).forEach(([jp,en])=>{
+      if(q.includes(jp))en.forEach(e=>{if(txt.includes(e))s+=5});
+    });
+    return{a,s};
+  }).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+
+  document.getElementById('srp-title').textContent=`"${q}" の検索結果 — ${scored.length}件`;
+  const ai=document.getElementById('sr-ai'),ait=document.getElementById('sr-ai-txt');
+  if(scored.length>0){
+    ai.classList.add('show');
+    const top=scored.slice(0,3),cats=[...new Set(top.map(x=>CL[x.a.cat]))];
+    ait.textContent=`「${q}」に関連する記事が${scored.length}件見つかりました。主なカテゴリ：${cats.join('、')}。最も関連性の高い記事「${top[0].a.title.substring(0,50)}...」をおすすめします。`;
+  }else{
+    ai.classList.add('show');
+    ait.textContent=`「${q}」に一致する記事が見つかりませんでした。別のキーワードをお試しください（例：「宇宙」「量子」「ゲノム編集」「気候変動」）。`;
+  }
+  const list=document.getElementById('sr-list');
+  list.innerHTML=scored.slice(0,8).map(({a})=>`
+    <div class="sr-item" data-id="${a.id}">
+      <img class="sr-img" src="${a.img}" alt="" loading="lazy">
+      <div><div class="sr-title">${a.title}</div><div class="sr-meta">${CL[a.cat]||a.cat} · ${a.src} · ${a.date}</div></div>
+    </div>`).join('');
+  list.querySelectorAll('.sr-item').forEach(el=>{
+    el.addEventListener('click',()=>{const a=all.find(x=>x.id===el.dataset.id);if(a){document.getElementById('srp').classList.remove('show');openModal(a)}});
+  });
+  document.getElementById('srp').classList.add('show');
+}
+
+/* ── THEME ── */
+document.getElementById('tt').addEventListener('click',()=>{
+  const h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');
+});
+
+/* ── EDITION UI ── */
+function updateEdUI(){
+  ED=edInfo();
+  const{isMorn,arts,pct,next}=ED;
+  const lbl=isMorn?'Morning':'Evening';
+  document.getElementById('edLbl').textContent=lbl;
+  document.getElementById('edTime').textContent=isMorn?'朝版 (06:00〜)':'夕版 (18:00〜)';
+  document.getElementById('sb-ed').textContent=`${lbl} Edition`;
+  document.getElementById('sb-next').textContent=next.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('sb-prog').style.width=pct.toFixed(1)+'%';
+  document.getElementById('st-upd').textContent=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* ── ARCHIVE ── */
+function openArc(){
+  const a=loadArc();
+  const keys=Object.keys(a).sort().reverse();
+  const arcb=document.getElementById('arcb');
+  if(!keys.length){
+    arcb.innerHTML='<div class="fp-empty">📚 アーカイブはまだありません<br>記事を更新すると過去版が蓄積されます</div>';
+  }else{
+    arcb.innerHTML=keys.map(k=>{
+      const p=k.split('-');
+      const edStr=p[3]==='m'?'🌅 朝版':'🌆 夕版';
+      const cnt=(a[k].articles||[]).length;
+      const ts=new Date(a[k].ts).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<div class="arc-ed" data-key="${k}">
+        <div>
+          <div class="arc-ed-date">${p[0]}年${p[1]}月${p[2]}日 ${edStr}</div>
+          <div class="arc-ed-meta">${ts} 保存</div>
+        </div>
+        <span class="arc-ed-cnt">${cnt}記事</span>
+      </div>`;
+    }).join('');
+    arcb.querySelectorAll('.arc-ed').forEach(el=>{
+      el.addEventListener('click',()=>{loadArcEdition(el.dataset.key);closeArc();});
+    });
+  }
+  document.getElementById('arcovl').classList.add('open');
+  document.getElementById('arcp').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeArc(){
+  document.getElementById('arcovl').classList.remove('open');
+  document.getElementById('arcp').classList.remove('open');
+  document.body.style.overflow='';
+}
+function loadArcEdition(key){
+  const a=loadArc();
+  const arts=(a[key]?.articles)||[];
+  if(!arts.length){toast('この版の記事データがありません');return;}
+  const p=key.split('-');
+  const edStr=p[3]==='m'?'朝版':'夕版';
+  arcMode={active:true,key,arts};
+  const banner=document.getElementById('arc-banner');
+  banner.querySelector('.arc-banner-txt').textContent=`${p[0]}年${p[1]}月${p[2]}日 ${edStr}を表示中`;
+  banner.classList.add('show');
+  activeCat='all';
+  renderTabs();renderGrid();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function exitArcMode(){
+  arcMode={active:false,key:null,arts:[]};
+  document.getElementById('arc-banner').classList.remove('show');
+  activeCat='all';renderTabs();renderGrid();
+}
+document.getElementById('arcc').addEventListener('click',closeArc);
+document.getElementById('arcovl').addEventListener('click',closeArc);
+
+/* ── MANUAL UPDATE ── */
+async function manualUpdate(){
+  const btn=document.getElementById('updateBtn');
+  btn.innerHTML='<span class="spinning">🔄</span>';
+  btn.disabled=true;
+  toast('🔄 記事を更新中... 約30秒かかります');
+  try{
+    const base=window.location.protocol==='file:'?'http://localhost:8080':window.location.origin;
+    const r=await fetch(base+'/update',{signal:AbortSignal.timeout(6000)});
+    if(r.ok){
+      toast('✅ 更新開始！完了後に自動でリロードします');
+      setTimeout(()=>location.reload(),35000);
+    }
+  }catch{
+    toast('⚠️ サーバー未起動です。run_server.bat を先に実行してください');
+    btn.innerHTML='🔄';btn.disabled=false;
+  }
+}
+document.getElementById('updateBtn').addEventListener('click',manualUpdate);
+
+/* ── INIT ── */
+(function init(){
+  updateEdUI();
+  addToArc(ED.arts,ED.key);
+  renderTabs();renderGrid();refreshFavUI();
+  setInterval(()=>{
+    const newED=edInfo();
+    if(newED.key!==ED.key){addToArc(newED.arts,newED.key);}
+    updateEdUI();renderGrid();
+  },60000);
+})();
+</script></body></html>
