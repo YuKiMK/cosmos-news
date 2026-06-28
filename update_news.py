@@ -24,7 +24,6 @@ import re
 import os
 import sys
 import random
-import argparse
 from datetime import datetime
 from pathlib import Path
 
@@ -86,11 +85,7 @@ IMAGES: dict[str, list[str]] = {
     ],
 }
 
-# Category order per edition (determines card layout — first = featured)
-EDITION_CATS: dict[str, list[str]] = {
-    "morning": ["space", "quantum", "ai", "bio", "earth"],
-    "evening": ["space", "ai", "bio", "earth", "quantum"],
-}
+DAILY_CATS: list[str] = ["space", "quantum", "ai", "bio", "earth"]
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 def log(msg: str) -> None:
@@ -197,7 +192,7 @@ Rules: vocab = 4 key scientific terms. quiz = 5 questions with varied ans (0-3).
 """
 
 def gen_article(client: anthropic.Anthropic, raw: dict, cat: str,
-                idx: int, edition: str) -> "dict | None":
+                idx: int) -> "dict | None":
     now = datetime.now()
     month_year = f"{now.strftime('%B')} {now.year}"
     prompt = _PROMPT.format(
@@ -224,8 +219,8 @@ def gen_article(client: anthropic.Anthropic, raw: dict, cat: str,
         date_str = f"{now.strftime('%B')} {now.day}, {now.year}"
 
         return {
-            "id":      f"{edition[0]}{idx + 1}_{now.strftime('%Y%m%d')}",
-            "ed":      edition,
+            "id":      f"d{idx + 1}_{now.strftime('%Y%m%d')}",
+            "ed":      "daily",
             "title":   data["title"],
             "excerpt": data["excerpt"],
             "body":    data["body"],
@@ -288,8 +283,8 @@ def _build_block(articles: list[dict], name: str) -> str:
     return f"/*{name}_START*/\nconst {name}=[\n{body}\n];\n/*{name}_END*/"
 
 # ── HTML update ───────────────────────────────────────────────────────────────
-def update_html(articles: list[dict], edition: str) -> bool:
-    name = "MORNING" if edition == "morning" else "EVENING"
+def update_html(articles: list[dict]) -> bool:
+    name = "DAILY"
     try:
         html = HTML_FILE.read_text(encoding="utf-8")
         new_block = _build_block(articles, name)
@@ -331,14 +326,6 @@ def load_api_key() -> str:
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Cosmos News Updater")
-    parser.add_argument(
-        "--edition", choices=["morning", "evening"], required=True,
-        help="Which edition to update (morning=06:00 / evening=18:00)",
-    )
-    args = parser.parse_args()
-    edition = args.edition
-
     api_key = load_api_key()
     if not api_key:
         log("ERROR: ANTHROPIC_API_KEY not found.\n"
@@ -349,24 +336,22 @@ def main() -> None:
         log(f"ERROR: {HTML_FILE} not found")
         sys.exit(1)
 
-    log(f"=== Cosmos update: {edition} edition ===")
+    log("=== Cosmos update: daily edition ===")
     client = anthropic.Anthropic(api_key=api_key)
-    cats   = EDITION_CATS[edition]
 
     log("Fetching RSS feeds...")
-    candidates = collect_candidates(cats)
+    candidates = collect_candidates(DAILY_CATS)
 
     log("Generating articles with Claude...")
     articles: list[dict] = []
-    for i, cat in enumerate(cats):
+    for i, cat in enumerate(DAILY_CATS):
         pool = candidates.get(cat, [])
         if not pool:
             log(f"  SKIP {cat}: no RSS candidates")
             continue
-        # Evening uses second candidate when available to reduce overlap with morning
-        raw = pool[1 % len(pool)] if edition == "evening" and len(pool) > 1 else pool[0]
+        raw = pool[0]
         log(f"  [{cat}] {raw['title'][:55]}...")
-        art = gen_article(client, raw, cat, i, edition)
+        art = gen_article(client, raw, cat, i)
         if art:
             articles.append(art)
             log(f"    OK: {art['title'][:55]}")
@@ -378,7 +363,7 @@ def main() -> None:
         sys.exit(1)
 
     log("Writing HTML...")
-    ok = update_html(articles, edition)
+    ok = update_html(articles)
     log(f"=== {'Done' if ok else 'FAILED'}: {len(articles)} articles ===")
     if not ok:
         sys.exit(1)

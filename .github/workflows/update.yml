@@ -23,15 +23,10 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser anthropic
 
-      - name: Update morning articles
+      - name: Update daily articles
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python update_news.py --edition morning
-
-      - name: Update evening articles
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python update_news.py --edition evening
+        run: python update_news.py
 
       - name: Commit and push updated HTML
         run: |
