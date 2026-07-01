@@ -288,10 +288,77 @@ body{background:var(--bg);color:var(--text-primary)}
 .arc-back:hover{background:var(--accent-soft)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinning{animation:spin .8s linear infinite;display:inline-block}
+/* ── Word Popup ── */
+.word-popup{position:fixed;background:var(--bg-modal);border:1px solid var(--accent);border-radius:10px;padding:.45rem .875rem;z-index:2000;display:none;gap:8px;align-items:center;box-shadow:0 8px 32px rgba(0,0,0,.45);font-size:12.5px;pointer-events:all;transition:opacity .15s}
+.word-popup.show{display:flex}
+.wp-word{color:var(--accent);font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wp-save{background:var(--accent);color:#080C16;border:none;border-radius:6px;padding:3px 10px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:"Inter",sans-serif;white-space:nowrap}
+.wp-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:0;line-height:1;margin-left:2px}
+/* ── Word Bank ── */
+.wbovl{position:fixed;inset:0;background:var(--bg-overlay);z-index:800;opacity:0;pointer-events:none;transition:opacity .3s}
+.wbovl.open{opacity:1;pointer-events:all}
+.wbpanel{position:fixed;top:0;right:0;bottom:0;width:min(440px,95vw);background:var(--bg-modal);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:801;display:flex;flex-direction:column}
+.wbpanel.open{transform:translateX(0)}
+.wb-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;padding:.875rem 1.1rem;border-bottom:1px solid var(--border);background:var(--accent-soft)}
+.wb-stat{text-align:center;padding:.5rem .25rem;background:var(--bg-modal);border-radius:8px;border:1px solid var(--border)}
+.wb-stat-val{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:700;color:var(--accent)}
+.wb-stat-lbl{font-size:9.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:1px}
+.wb-filter{padding:.5rem 1.1rem;border-bottom:1px solid var(--border);display:flex;gap:6px}
+.wb-filter select{flex:1;background:var(--search-bg);border:1px solid var(--border);border-radius:7px;color:var(--text-secondary);font-size:12px;font-family:"Inter",sans-serif;padding:4px 8px;outline:none}
+.wb-list{flex:1;overflow-y:auto}
+.wb-item{display:flex;align-items:flex-start;gap:10px;padding:.875rem 1.1rem;border-bottom:1px solid var(--border);transition:background .2s}
+.wb-item:hover{background:var(--accent-soft)}
+.wb-word{font-family:"Space Grotesk",sans-serif;font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.wb-from{font-size:11px;color:var(--text-muted);margin-bottom:2px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
+.wb-date{font-size:10px;color:var(--text-muted)}
+.wb-del{background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font-size:11px;cursor:pointer;padding:2px 8px;white-space:nowrap;transition:all .2s;flex-shrink:0;margin-top:2px}
+.wb-del:hover{border-color:rgba(255,80,80,.5);color:#FF6060}
+.wb-empty{text-align:center;padding:3rem 1.5rem;color:var(--text-muted);font-size:13px;line-height:1.8}
+/* ── Auth Modal ── */
+.auth-ovl{position:fixed;inset:0;background:var(--bg-overlay);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.auth-ovl.open{opacity:1;pointer-events:all}
+.auth-panel{background:var(--bg-modal);border:1px solid var(--border);border-radius:20px;width:min(400px,92vw);padding:2rem;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.4);transform:translateY(20px) scale(.97);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.auth-ovl.open .auth-panel{transform:none}
+.auth-panel::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:20px 20px 0 0}
+.auth-logo{font-family:"Space Grotesk",sans-serif;font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:.25rem}
+.auth-logo span{color:var(--accent)}
+.auth-sub{font-size:12.5px;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.5}
+.auth-tabs{display:flex;gap:4px;margin-bottom:1.1rem;background:var(--tag-bg);padding:3px;border-radius:9px}
+.auth-tab{flex:1;padding:6px;border:none;border-radius:7px;background:transparent;color:var(--text-muted);font-size:12.5px;font-weight:500;font-family:"Inter",sans-serif;cursor:pointer;transition:all .2s}
+.auth-tab.active{background:var(--bg-modal);color:var(--text-primary);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.auth-field{width:100%;padding:.7rem .875rem;background:var(--search-bg);border:1px solid var(--border);border-radius:9px;font-size:13.5px;font-family:"Inter",sans-serif;color:var(--text-primary);outline:none;transition:border-color .2s;box-sizing:border-box;margin-bottom:.625rem;display:block}
+.auth-field:focus{border-color:var(--accent)}
+.auth-submit{width:100%;padding:.8rem;background:var(--accent);color:#080C16;border:none;border-radius:9px;font-size:13.5px;font-weight:600;font-family:"Inter",sans-serif;cursor:pointer;margin-top:.25rem;transition:opacity .2s}
+.auth-submit:hover{opacity:.85}
+.auth-err{font-size:12px;color:#FF6060;margin-top:.5rem;min-height:1.2em;line-height:1.4}
+.auth-note{font-size:11px;color:var(--text-muted);margin-top:1rem;text-align:center;line-height:1.6}
+.auth-note a{color:var(--accent);text-decoration:none}
+.auth-close{position:absolute;top:.875rem;right:.875rem;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+/* ── User chip ── */
+.user-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font-size:11.5px;cursor:pointer;transition:all .2s;font-family:"Inter",sans-serif;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.user-dot{width:6px;height:6px;border-radius:50%;background:#00D282;flex-shrink:0}
+/* ── Streak & learning sidebar ── */
+.streak-display{display:flex;align-items:center;gap:10px;padding:.625rem .875rem;background:linear-gradient(135deg,rgba(255,150,0,.12),rgba(255,80,0,.07));border:1px solid rgba(255,140,0,.3);border-radius:10px;margin-bottom:.5rem}
+.streak-fire{font-size:22px;line-height:1}
+.streak-count{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:700;color:#FF8C00;line-height:1}
+.streak-sub{font-size:10px;color:var(--text-muted);line-height:1.4}
+/* ── Vocab save button ── */
+.vsave{position:absolute;bottom:5px;right:7px;background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font-size:10px;cursor:pointer;padding:1px 6px;opacity:0;transition:opacity .2s,border-color .2s}
+.vitem:hover .vsave{opacity:1}
+.vitem:hover .vsave:hover{border-color:var(--accent);color:var(--accent)}
 </style>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="toast" id="toast"></div>
+<!-- Word selection popup -->
+<div class="word-popup" id="wordPopup">
+  <span class="wp-word" id="wpWord"></span>
+  <button class="wp-save" id="wpSave">💾 保存</button>
+  <button class="wp-close" id="wpClose">✕</button>
+</div>
 <header class="header">
   <div class="logo"><div class="logo-mark"></div><span class="logo-text">Cosmos<span>.</span></span></div>
   <div class="header-center">
@@ -301,7 +368,9 @@ body{background:var(--bg);color:var(--text-primary)}
   <div class="header-right">
     <div class="live-badge"><div class="live-dot"></div><span id="edLbl">—</span></div>
     <button class="icon-btn" id="updateBtn" title="記事を今すぐ更新">🔄</button>
+    <button class="icon-btn" id="wbBtn" title="マイ単語帳">📖<span class="badge" id="wbBadge"></span></button>
     <button class="icon-btn" id="favBtn" title="お気に入り">☆<span class="badge" id="favBadge">0</span></button>
+    <button class="icon-btn" id="authBtn" title="ログイン">👤</button>
     <button class="theme-toggle" id="tt"><span class="ti moon">🌙</span><span class="ti sun">☀️</span></button>
   </div>
 </header>
@@ -315,8 +384,65 @@ body{background:var(--bg);color:var(--text-primary)}
   <div class="fphead"><span class="fptitle">📚 記事アーカイブ</span><button class="fpclose" id="arcc">✕</button></div>
   <div class="fpbody" id="arcb"></div>
 </div>
+<!-- Word Bank panel -->
+<div class="wbovl" id="wbovl"></div>
+<div class="wbpanel" id="wbp">
+  <div class="fphead"><span class="fptitle">📖 マイ単語帳</span><button class="fpclose" id="wbc">✕</button></div>
+  <div class="wb-stats">
+    <div class="wb-stat"><div class="wb-stat-val" id="wb-total">0</div><div class="wb-stat-lbl">保存単語</div></div>
+    <div class="wb-stat"><div class="wb-stat-val" id="wb-articles">0</div><div class="wb-stat-lbl">記事数</div></div>
+    <div class="wb-stat"><div class="wb-stat-val" id="wb-today">0</div><div class="wb-stat-lbl">今日追加</div></div>
+  </div>
+  <div class="wb-filter">
+    <select id="wbSort">
+      <option value="newest">新しい順</option>
+      <option value="oldest">古い順</option>
+      <option value="alpha">アルファベット順</option>
+    </select>
+  </div>
+  <div class="wb-list" id="wbList"></div>
+</div>
+<!-- Auth modal -->
+<div class="auth-ovl" id="authOvl">
+  <div class="auth-panel">
+    <button class="auth-close" id="authClose">✕</button>
+    <div class="auth-logo">Cosmos<span>.</span></div>
+    <div class="auth-sub">メールアドレスを入力するだけでOK。<br>パスワード不要のマジックリンク認証です。</div>
+    <div id="authForm">
+      <input class="auth-field" type="email" id="authEmail" placeholder="メールアドレス" autocomplete="email">
+      <button class="auth-submit" id="authSubmit" onclick="sendMagicLink()">🔗 マジックリンクを送信</button>
+      <div class="auth-err" id="authErr"></div>
+    </div>
+    <div id="authSent" style="display:none;text-align:center;padding:1.25rem 0">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">📧</div>
+      <div style="font-weight:600;color:var(--text-primary);margin-bottom:.5rem">メールを確認してください</div>
+      <div style="font-size:12.5px;color:var(--text-muted);line-height:1.7">マジックリンクをメールで送信しました。<br>リンクをクリックするとログイン完了です。</div>
+      <button onclick="document.getElementById('authSent').style.display='none';document.getElementById('authForm').style.display='block'" style="margin-top:1rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);padding:6px 14px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px">別のメールで試す</button>
+    </div>
+    <div class="auth-note">
+      パスワード不要・安全なワンタイムリンク方式<br>
+      データはSupabase（PostgreSQL）に保存されます<br>
+      ⚠️ <a href="#" onclick="showSupabaseHelp();return false">Supabaseの初期設定が必要です</a>
+    </div>
+  </div>
+</div>
 <div class="layout">
   <aside class="sidebar">
+    <div>
+      <div class="slabel">🎓 学習統計</div>
+      <div class="streak-display">
+        <span class="streak-fire">🔥</span>
+        <div>
+          <div class="streak-count" id="sb-streak">0</div>
+          <div class="streak-sub">日連続アクセス</div>
+        </div>
+      </div>
+      <div class="info-box">
+        <div class="info-row"><span class="info-label">保存単語数</span><span class="info-val" id="sb-words">0</span></div>
+        <div class="info-row"><span class="info-label">クイズ正答率</span><span class="info-val" id="sb-acc">—</span></div>
+        <div class="info-row"><span class="info-label">クイズ回答数</span><span class="info-val" id="sb-qtot">0</span></div>
+      </div>
+    </div>
     <div>
       <div class="slabel">📡 更新スケジュール</div>
       <div class="info-box">
@@ -342,9 +468,9 @@ body{background:var(--bg);color:var(--text-primary)}
   <div class="main-wrap">
     <main class="main">
       <section class="hero">
-        <p class="hero-eye">Science Intelligence</p>
-        <h1 class="hero-title">Discover the <span>frontiers</span> of human knowledge</h1>
-        <p class="hero-sub">NASA · Nature · ScienceDaily · SETI Institute · MIT Tech Review — 朝夕2エディション</p>
+        <p class="hero-eye">Science Learning Platform</p>
+        <h1 class="hero-title">Explore the <span>frontiers</span> of science</h1>
+        <p class="hero-sub">NASA · Nature · ScienceDaily · MIT Tech Review — 単語保存・クイズ・アーカイブ機能付き</p>
       </section>
       <div class="arc-banner" id="arc-banner">
         <span class="arc-banner-txt">アーカイブを表示中</span>
@@ -382,14 +508,14 @@ body{background:var(--bg);color:var(--text-primary)}
       <h2 class="mtitle" id="mtitle"></h2>
       <div class="mbyline"><span class="msrc" id="msrc"></span><span class="msep">·</span><span class="mdate" id="mdate"></span></div>
       <div class="mbody" id="mbody"></div>
-      <div class="divider"><div class="dl"></div><div class="dlabel">📖 Key Terms — タップして Google Keep に保存</div><div class="dl"></div></div>
+      <div class="divider"><div class="dl"></div><div class="dlabel">📖 Key Terms — 💾 をタップして単語帳に保存</div><div class="dl"></div></div>
       <div class="vpanel"><div class="vgrid" id="vgrid"></div></div>
       <div class="divider"><div class="dl"></div><div class="dlabel">🧠 Comprehension Quiz（5問）</div><div class="dl"></div></div>
       <div class="qpanel" id="qpanel"></div>
       <div class="mactions">
         <a id="alink" class="btn-p" href="#" target="_blank" rel="noopener">Read Full Article ↗</a>
-        <button class="btn-s" id="keepAll">📒 全用語を Keep 保存</button>
-        <button class="btn-s" onclick="closeMod()">Close</button>
+        <button class="btn-s" id="keepAll">📖 全用語を単語帳に保存</button>
+        <button class="btn-s" onclick="closeMod()">閉じる</button>
       </div>
     </div>
   </div>
@@ -615,14 +741,17 @@ function renderGrid(){
 function renderVocab(a){
   document.getElementById('vgrid').innerHTML=a.vocab.map(v=>`
     <div class="vitem" data-term="${v.term}" data-ja="${v.ja}" data-desc="${v.desc}">
-      <span class="kh">📒 Keep</span>
+      <button class="vsave" data-term="${v.term}" title="単語帳に保存">💾</button>
       <div class="vterm">${v.term}</div>
       <div class="vread">${v.r}</div>
       <div class="vja">${v.ja}</div>
       <div class="vdesc">${v.desc}</div>
     </div>`).join('');
   document.getElementById('vgrid').querySelectorAll('.vitem').forEach(el=>{
-    el.addEventListener('click',()=>keepOpen(el.dataset.term,el.dataset.ja,el.dataset.desc));
+    el.addEventListener('click',e=>{
+      if(e.target.classList.contains('vsave')){addWord(e.target.dataset.term,openArt?.id,openArt?.title);return;}
+      keepOpen(el.dataset.term,el.dataset.ja,el.dataset.desc);
+    });
   });
 }
 
@@ -634,10 +763,17 @@ function keepOpen(term,ja,desc){
   toast(`📒 "${term}" を Google Keep で開きました`);
 }
 function keepAll(a){
-  const title=`🔬 Cosmos用語集: ${a.title.substring(0,40)}...`;
-  const body=a.vocab.map(v=>`• ${v.term}（${v.ja}）\n  ${v.desc}`).join('\n\n')+'\n\n📱 Cosmos Science News';
-  window.open(`https://keep.google.com/#NOTE&title=${encodeURIComponent(title)}&text=${encodeURIComponent(body)}`,'_blank','width=500,height=700,noopener');
-  toast('📒 全用語を Google Keep で開きました');
+  let added=0;
+  a.vocab.forEach(v=>{
+    const w=loadWords();
+    if(!w.find(x=>x.word.toLowerCase()===v.term.toLowerCase())){
+      w.unshift({word:v.term,articleId:a.id,articleTitle:a.title,savedAt:new Date().toISOString()});
+      saveWords(w);added++;
+    }
+  });
+  updateWordBadge();refreshSidebarStats();
+  toast(added>0?`💾 ${added}語を単語帳に保存しました`:'すべての用語はすでに保存済みです');
+  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
 }
 function toast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
@@ -683,6 +819,7 @@ function nextQ(){
 }
 function showRes(){
   const{score}=qState,tot=window._qa.quiz.length,pct=Math.round(score/tot*100);
+  recordQuizResult(score,tot);
   const msgs=['📚 記事をもう一度読み返してみましょう！','👍 基礎は理解できています。','🌟 なかなか素晴らしい！','🏆 この分野の内容をよく把握しています！','💎 満点！科学的理解力が際立っています！'];
   const mi=pct<40?0:pct<60?1:pct<80?2:pct<100?3:4;
   document.getElementById('qpanel').innerHTML=`<div class="qres show">
@@ -858,12 +995,11 @@ function openArc(){
   }else{
     arcb.innerHTML=keys.map(k=>{
       const p=k.split('-');
-      const edStr=p[3]==='m'?'🌅 朝版':'🌆 夕版';
       const cnt=(a[k].articles||[]).length;
       const ts=new Date(a[k].ts).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
       return `<div class="arc-ed" data-key="${k}">
         <div>
-          <div class="arc-ed-date">${p[0]}年${p[1]}月${p[2]}日 ${edStr}</div>
+          <div class="arc-ed-date">${p[0]}年${p[1]}月${p[2]}日 📰 デイリー版</div>
           <div class="arc-ed-meta">${ts} 保存</div>
         </div>
         <span class="arc-ed-cnt">${cnt}記事</span>
@@ -887,10 +1023,9 @@ function loadArcEdition(key){
   const arts=(a[key]?.articles)||[];
   if(!arts.length){toast('この版の記事データがありません');return;}
   const p=key.split('-');
-  const edStr=p[3]==='m'?'朝版':'夕版';
   arcMode={active:true,key,arts};
   const banner=document.getElementById('arc-banner');
-  banner.querySelector('.arc-banner-txt').textContent=`${p[0]}年${p[1]}月${p[2]}日 ${edStr}を表示中`;
+  banner.querySelector('.arc-banner-txt').textContent=`${p[0]}年${p[1]}月${p[2]}日 デイリー版を表示中`;
   banner.classList.add('show');
   activeCat='all';
   renderTabs();renderGrid();
@@ -924,11 +1059,235 @@ async function manualUpdate(){
 }
 document.getElementById('updateBtn').addEventListener('click',manualUpdate);
 
+/* ── WORD BANK ── */
+function loadWords(){try{return JSON.parse(localStorage.getItem('cosmos_words')||'[]')}catch{return[]}}
+function saveWords(w){try{localStorage.setItem('cosmos_words',JSON.stringify(w))}catch{}}
+function addWord(word,articleId,articleTitle){
+  const normalized=(word||'').trim();
+  if(!normalized||normalized.length<1||normalized.length>100)return;
+  const w=loadWords();
+  if(w.find(x=>x.word.toLowerCase()===normalized.toLowerCase())){toast(`「${normalized}」はすでに保存済みです`);return;}
+  w.unshift({word:normalized,articleId:articleId||null,articleTitle:articleTitle||null,savedAt:new Date().toISOString()});
+  saveWords(w);updateWordBadge();refreshSidebarStats();
+  toast(`💾 「${normalized}」を単語帳に保存しました`);
+  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+}
+function deleteWord(word){
+  saveWords(loadWords().filter(x=>x.word!==word));
+  updateWordBadge();refreshSidebarStats();renderWordBank();
+  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+}
+function updateWordBadge(){
+  const n=loadWords().length,b=document.getElementById('wbBadge');
+  if(!b)return;
+  b.textContent=n>99?'99+':n;b.classList.toggle('show',n>0);
+}
+function renderWordBank(){
+  const words=loadWords();
+  const sort=document.getElementById('wbSort')?.value||'newest';
+  let sorted=[...words];
+  if(sort==='oldest')sorted.reverse();
+  else if(sort==='alpha')sorted.sort((a,b)=>a.word.localeCompare(b.word));
+  const today=new Date().toISOString().split('T')[0];
+  const todayN=words.filter(w=>w.savedAt.startsWith(today)).length;
+  const artIds=new Set(words.filter(w=>w.articleId).map(w=>w.articleId));
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('wb-total',words.length);set('wb-articles',artIds.size);set('wb-today',todayN);
+  const list=document.getElementById('wbList');
+  if(!list)return;
+  if(!sorted.length){
+    list.innerHTML='<div class="wb-empty">📖 まだ単語が保存されていません<br><br>記事を読みながら気になった単語を<br>テキスト選択 → 「💾 保存」でタップ<br>または用語カードの 💾 をタップ</div>';
+    return;
+  }
+  list.innerHTML=sorted.map(w=>`
+    <div class="wb-item">
+      <div style="flex:1;min-width:0">
+        <div class="wb-word">${w.word}</div>
+        ${w.articleTitle?`<div class="wb-from">📰 ${w.articleTitle}</div>`:''}
+        <div class="wb-date">${new Date(w.savedAt).toLocaleDateString('ja-JP',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <button class="wb-del" data-word="${w.word.replace(/"/g,'&quot;')}">削除</button>
+    </div>`).join('');
+  list.querySelectorAll('.wb-del').forEach(btn=>btn.addEventListener('click',()=>deleteWord(btn.dataset.word)));
+}
+function openWB(){renderWordBank();document.getElementById('wbovl').classList.add('open');document.getElementById('wbp').classList.add('open');document.body.style.overflow='hidden';}
+function closeWB(){document.getElementById('wbovl').classList.remove('open');document.getElementById('wbp').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('wbBtn').addEventListener('click',openWB);
+document.getElementById('wbc').addEventListener('click',closeWB);
+document.getElementById('wbovl').addEventListener('click',closeWB);
+document.getElementById('wbSort').addEventListener('change',renderWordBank);
+
+/* ── WORD SELECTION POPUP ── */
+let wpWord='';
+function showWordPopup(word,x,y){
+  wpWord=word;
+  document.getElementById('wpWord').textContent=word.length>22?word.substring(0,22)+'…':word;
+  const p=document.getElementById('wordPopup');
+  p.style.top=Math.max(10,y-52)+'px';
+  p.style.left=Math.min(window.innerWidth-230,Math.max(8,x-90))+'px';
+  p.classList.add('show');
+}
+function hideWordPopup(){document.getElementById('wordPopup').classList.remove('show');wpWord='';}
+document.getElementById('mbody').addEventListener('mouseup',e=>{
+  setTimeout(()=>{
+    const sel=window.getSelection(),word=(sel?.toString()||'').trim();
+    if(word&&word.length>=1&&word.length<=80)showWordPopup(word,e.clientX,e.clientY);
+    else hideWordPopup();
+  },10);
+});
+document.getElementById('mbody').addEventListener('touchend',e=>{
+  setTimeout(()=>{
+    const sel=window.getSelection(),word=(sel?.toString()||'').trim();
+    if(word&&word.length>=1&&word.length<=80){
+      const t=e.changedTouches[0];showWordPopup(word,t.clientX,t.clientY);
+    }
+  },80);
+});
+document.getElementById('wpSave').addEventListener('click',()=>{
+  if(wpWord)addWord(wpWord,openArt?.id,openArt?.title);
+  hideWordPopup();window.getSelection()?.removeAllRanges();
+});
+document.getElementById('wpClose').addEventListener('click',()=>{hideWordPopup();window.getSelection()?.removeAllRanges();});
+document.addEventListener('mousedown',e=>{
+  const p=document.getElementById('wordPopup');
+  if(p.classList.contains('show')&&!p.contains(e.target))hideWordPopup();
+});
+
+/* ── QUIZ STATS ── */
+function loadQStats(){try{return JSON.parse(localStorage.getItem('cosmos_qstats')||'{"total":0,"correct":0}')}catch{return{total:0,correct:0}}}
+function saveQStats(s){try{localStorage.setItem('cosmos_qstats',JSON.stringify(s))}catch{}}
+function recordQuizResult(correct,total){
+  const s=loadQStats();s.total+=total;s.correct+=correct;saveQStats(s);refreshSidebarStats();
+  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+}
+
+/* ── STREAK ── */
+function loadStreak(){try{return JSON.parse(localStorage.getItem('cosmos_streak')||'{"count":0,"last":""}')}catch{return{count:0,last:''}}}
+function saveStreak(s){try{localStorage.setItem('cosmos_streak',JSON.stringify(s))}catch{}}
+function updateStreak(){
+  const today=new Date().toISOString().split('T')[0],s=loadStreak();
+  if(s.last===today)return;
+  const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  s.count=s.last===yesterday?s.count+1:1;s.last=today;saveStreak(s);
+}
+
+/* ── SIDEBAR STATS ── */
+function refreshSidebarStats(){
+  const streak=loadStreak(),words=loadWords(),q=loadQStats();
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('sb-streak',streak.count);
+  set('sb-words',words.length);
+  set('sb-qtot',q.total);
+  set('sb-acc',q.total>0?Math.round(q.correct/q.total*100)+'%':'—');
+}
+
+/* ── SUPABASE CONFIG ── */
+// ↓ Supabaseプロジェクト作成後、ここに設定を入力してください
+// https://supabase.com → Settings → API → Project URL & anon key
+const SUPABASE_URL="";   // 例: https://xxxx.supabase.co
+const SUPABASE_KEY="";   // anon/public キー
+const SUPABASE_ENABLED=!!(SUPABASE_URL&&SUPABASE_KEY);
+let _sb=null,currentUser=null;
+if(SUPABASE_ENABLED){
+  try{
+    _sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+    _sb.auth.onAuthStateChange(async(event,session)=>{
+      currentUser=session?.user||null;
+      updateAuthUI(currentUser);
+      if(currentUser&&(event==='SIGNED_IN'||event==='TOKEN_REFRESHED'))await syncFromCloud();
+    });
+    _sb.auth.getSession().then(({data:{session}})=>{
+      currentUser=session?.user||null;
+      updateAuthUI(currentUser);
+      if(currentUser)syncFromCloud();
+    });
+  }catch(e){console.warn('Supabase init error:',e);}
+}
+
+/* ── CLOUD SYNC ── */
+async function syncFromCloud(){
+  if(!_sb||!currentUser)return;
+  try{
+    const{data,error}=await _sb.from('user_data').select('*').eq('user_id',currentUser.id).single();
+    if(!error&&data){
+      if(data.words)saveWords(data.words);
+      if(data.favorites)saveFavs(data.favorites);
+      if(data.quiz_stats)saveQStats(data.quiz_stats);
+      if(data.streak)saveStreak(data.streak);
+      refreshFavUI();updateWordBadge();refreshSidebarStats();
+      toast('☁️ データを同期しました');
+    }
+  }catch(e){console.warn('Cloud sync failed:',e);}
+}
+async function syncToCloud(){
+  if(!_sb||!currentUser)return;
+  try{
+    await _sb.from('user_data').upsert({
+      user_id:currentUser.id,words:loadWords(),favorites:loadFavs(),
+      quiz_stats:loadQStats(),streak:loadStreak(),updated_at:new Date().toISOString()
+    },{onConflict:'user_id'});
+  }catch(e){console.warn('Cloud save failed:',e);}
+}
+
+/* ── AUTH ── */
+function openAuthModal(){
+  document.getElementById('authOvl').classList.add('open');
+  document.getElementById('authForm').style.display='block';
+  document.getElementById('authSent').style.display='none';
+  document.getElementById('authErr').textContent='';
+  setTimeout(()=>document.getElementById('authEmail').focus(),100);
+}
+function closeAuthModal(){document.getElementById('authOvl').classList.remove('open');}
+async function sendMagicLink(){
+  const email=document.getElementById('authEmail').value.trim();
+  const errEl=document.getElementById('authErr');
+  errEl.textContent='';
+  if(!SUPABASE_ENABLED){errEl.textContent='⚠️ Supabase が未設定です。SUPABASE_URL と SUPABASE_KEY を設定してください。';return;}
+  if(!email||!email.includes('@')){errEl.textContent='正しいメールアドレスを入力してください';return;}
+  const btn=document.getElementById('authSubmit');
+  btn.disabled=true;btn.textContent='送信中...';
+  try{
+    const redirectTo=window.location.protocol==='file:'
+      ?'http://localhost:8080'
+      :window.location.href.split('?')[0];
+    const{error}=await _sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});
+    if(error)throw error;
+    document.getElementById('authForm').style.display='none';
+    document.getElementById('authSent').style.display='block';
+  }catch(e){
+    errEl.textContent=e.message||'エラーが発生しました';
+    btn.disabled=false;btn.textContent='🔗 マジックリンクを送信';
+  }
+}
+async function logout(){
+  if(!_sb)return;
+  await _sb.auth.signOut();currentUser=null;updateAuthUI(null);toast('ログアウトしました');
+}
+function updateAuthUI(user){
+  const btn=document.getElementById('authBtn');if(!btn)return;
+  if(user){
+    btn.innerHTML=`<span class="user-dot"></span> ${user.email.split('@')[0]}`;
+    btn.className='user-chip';btn.title=`${user.email} (タップでログアウト)`;
+    btn.onclick=()=>{if(confirm('ログアウトしますか？'))logout();};
+  }else{
+    btn.innerHTML='👤';btn.className='icon-btn';btn.title='ログイン・新規登録';
+    btn.onclick=openAuthModal;
+  }
+}
+function showSupabaseHelp(){
+  alert('Supabaseの設定手順（5分）:\n\n① https://supabase.com → 「Start your project」\n② 新規プロジェクトを作成\n③ Settings → API → Project URL と anon key をコピー\n④ 科学情報.html内の SUPABASE_URL と SUPABASE_KEY に貼り付け\n⑤ SQL Editor で以下を実行:\n\ncreate table user_data (\n  user_id uuid references auth.users primary key,\n  words jsonb default \'[]\'::jsonb,\n  favorites jsonb default \'[]\'::jsonb,\n  quiz_stats jsonb default \'{}\'::jsonb,\n  streak jsonb default \'{}\'::jsonb,\n  updated_at timestamptz default now()\n);\nalter table user_data enable row level security;\ncreate policy "own data" on user_data\n  for all using (auth.uid() = user_id);\n\n⑥ Authentication → URL Configuration → Redirect URLs にサイトのURLを追加');
+}
+document.getElementById('authClose').addEventListener('click',closeAuthModal);
+document.getElementById('authOvl').addEventListener('click',e=>{if(e.target===document.getElementById('authOvl'))closeAuthModal();});
+
 /* ── INIT ── */
 (function init(){
+  updateStreak();
   updateEdUI();
   addToArc(ED.arts,ED.key);
   renderTabs();renderGrid();refreshFavUI();
+  updateWordBadge();refreshSidebarStats();
+  updateAuthUI(null);
   setInterval(()=>{
     const newED=edInfo();
     if(newED.key!==ED.key){addToArc(newED.arts,newED.key);}
