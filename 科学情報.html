@@ -347,6 +347,140 @@ body{background:var(--bg);color:var(--text-primary)}
 .vsave{position:absolute;bottom:5px;right:7px;background:none;border:1px solid var(--border);border-radius:5px;color:var(--text-muted);font-size:10px;cursor:pointer;padding:1px 6px;opacity:0;transition:opacity .2s,border-color .2s}
 .vitem:hover .vsave{opacity:1}
 .vitem:hover .vsave:hover{border-color:var(--accent);color:var(--accent)}
+/* ══ MOBILE / TOUCH ══ */
+*{-webkit-tap-highlight-color:transparent}
+/* Touch devices: always show hover-only elements */
+@media(hover:none){
+  .cfav{opacity:1}.cmore{opacity:1;transform:translateX(0)}.vsave{opacity:1}
+  .card:active{transform:translateY(-2px)}.icon-btn:active{background:var(--accent-soft)}
+  .tab:active{background:var(--accent-soft)}.qopt:active:not(:disabled){background:var(--accent-soft)}
+}
+/* ── Bottom Navigation Bar ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;
+  background:var(--header-bg);border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:0 .25rem env(safe-area-inset-bottom,.25rem);height:60px;
+  align-items:center;justify-content:space-around}
+.bn-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  min-width:52px;height:52px;border-radius:10px;background:none;border:none;
+  color:var(--text-muted);font-size:9.5px;font-family:"Inter",sans-serif;font-weight:500;
+  cursor:pointer;transition:color .15s;position:relative;padding:0}
+.bn-item.active{color:var(--accent)}
+.bn-icon{font-size:21px;line-height:1.15;display:block}
+.bn-badge{position:absolute;top:4px;right:5px;background:var(--accent);color:#080C16;
+  font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;
+  padding:0 2px;display:none;align-items:center;justify-content:center}
+.bn-badge.show{display:flex}
+/* ── Drag Handle ── */
+.drag-handle{width:36px;height:4px;background:var(--border);border-radius:2px;
+  margin:10px auto 2px;flex-shrink:0;display:none}
+/* ── Mobile Search Overlay ── */
+.msovl{display:none;position:fixed;inset:0;z-index:500;background:var(--bg);flex-direction:column}
+.msovl.open{display:flex}
+.ms-bar{display:flex;align-items:center;gap:.625rem;padding:.75rem .875rem;
+  background:var(--header-bg);border-bottom:1px solid var(--border)}
+.ms-inp{flex:1;height:44px;background:var(--search-bg);border:1px solid var(--border);
+  border-radius:12px;padding:0 14px;font-size:16px;font-family:"Inter",sans-serif;
+  color:var(--text-primary);outline:none;-webkit-appearance:none;appearance:none}
+.ms-inp:focus{border-color:var(--accent)}
+.ms-cancel{background:none;border:none;color:var(--accent);font-size:14px;font-weight:500;
+  font-family:"Inter",sans-serif;cursor:pointer;padding:4px 0;white-space:nowrap}
+.ms-body{flex:1;overflow-y:auto;padding:.875rem}
+/* ── Mobile Stats Strip ── */
+.mob-stats{display:none;grid-template-columns:repeat(3,1fr);gap:.5rem;
+  padding:.75rem .75rem .25rem}
+.ms-item{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
+  padding:.5rem .5rem;text-align:center}
+.ms-val{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:700;color:var(--accent)}
+.ms-lbl{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+/* ══ PHONE  ≤ 640px ══ */
+@media(max-width:640px){
+  body{padding-bottom:60px}
+  .bottom-nav{display:flex}
+  .drag-handle{display:block}
+  .mob-stats{display:grid}
+  /* Header compact */
+  .header{height:54px;padding:0 .875rem;gap:6px}
+  .logo-text{font-size:16px}
+  .header-center{display:none}
+  .live-badge{display:none}
+  #searchMobBtn{display:flex!important}
+  #updateBtn{display:none!important}
+  #wbBtn,#favBtn,#authBtn{display:none!important}
+  .icon-btn{width:40px;height:40px;font-size:17px}
+  .user-chip{display:none!important}
+  .theme-toggle{width:40px;height:22px}
+  .theme-toggle::after{width:16px;height:16px;top:2px;left:2px}
+  [data-theme="light"] .theme-toggle::after{transform:translateX(18px)}
+  /* Toast above bottom nav */
+  .toast{bottom:72px}
+  /* Word popup: prevent overflow */
+  .word-popup{left:12px!important;right:12px!important;width:auto!important;max-width:none;justify-content:space-between}
+  /* Main */
+  .main{padding:.875rem .75rem 1rem}
+  .hero{margin-bottom:1rem}
+  .hero-eye{display:none}
+  .hero-title{font-size:1.45rem;letter-spacing:-.8px}
+  .hero-sub{font-size:12.5px;margin-top:.375rem;max-width:100%}
+  /* Tabs: horizontal scroll strip */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;gap:5px;margin-bottom:1rem}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex-shrink:0;font-size:12.5px;padding:6px 12px}
+  /* Cards: always-visible buttons, no hover lift */
+  .cfav{opacity:1;width:36px;height:36px;font-size:15px}
+  .cmore{opacity:1;transform:translateX(0)}
+  .card:hover{transform:none;box-shadow:none;background:var(--bg-card)}
+  .card:hover::before{transform:scaleX(0)}
+  .card:hover::after{opacity:0}
+  .card:active{transform:scale(.985)}
+  .cbody{padding:.875rem 1rem 1rem}
+  .cf .cbody{padding:1rem 1.1rem 1.1rem}
+  .cf .ctitle{font-size:1.05rem}
+  /* Modal → bottom sheet */
+  .movl{align-items:flex-end;padding:0}
+  .mpanel{border-radius:20px 20px 0 0;max-height:93dvh;overflow-y:auto;
+    transform:translateY(100%);margin:0;width:100%}
+  .movl.open .mpanel{transform:translateY(0)}
+  .mimg{aspect-ratio:16/9}
+  .mcont{padding:1rem 1rem 1.5rem}
+  .mtitle{font-size:1.1rem;letter-spacing:-.3px}
+  .mbody{font-size:14.5px;line-height:1.9}
+  /* Quiz bigger tap targets */
+  .qopt{padding:13px 14px;font-size:13.5px;min-height:50px}
+  .qnext,.qretry{padding:10px 18px;font-size:13.5px}
+  /* Side panels → bottom sheet */
+  .fppanel,.wbpanel,.arcpanel{
+    width:100%;left:0;right:0;bottom:0;top:auto;
+    height:92dvh;max-height:92dvh;
+    border-radius:20px 20px 0 0;
+    border-left:none;border-right:none;border-top:1px solid var(--border)}
+  .fppanel{transform:translateY(100%)}
+  .fppanel.open{transform:translateY(0)}
+  .arcpanel{transform:translateY(100%)}
+  .arcpanel.open{transform:translateY(0)}
+  .wbpanel{transform:translateY(100%)}
+  .wbpanel.open{transform:translateY(0)}
+  /* Auth panel */
+  .auth-ovl{align-items:flex-end}
+  .auth-panel{border-radius:20px 20px 0 0;width:100%;padding:1.5rem 1.25rem 2rem}
+  .auth-submit{padding:.9rem;font-size:15px;min-height:50px}
+  .auth-field{font-size:16px;padding:.75rem .875rem}
+  /* Vocab grid → 2 columns */
+  .vgrid{grid-template-columns:1fr 1fr}
+  .vsave{opacity:1}
+  /* Stats */
+  .stats{gap:1rem;margin-top:1.25rem}
+  /* Footer */
+  .footer{padding:1.5rem .875rem}
+}
+/* ══ TABLET  641–900px ══ */
+@media(min-width:641px) and (max-width:900px){
+  .header{padding:0 1.25rem}
+  .icon-btn{width:38px;height:38px}
+  .cfav{opacity:1}.cmore{opacity:1;transform:translateX(0)}.vsave{opacity:1}
+  .vgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+}
 </style>
 </head>
 <body>
@@ -365,6 +499,7 @@ body{background:var(--bg);color:var(--text-primary)}
   </div>
   <div class="header-right">
     <div class="live-badge"><div class="live-dot"></div><span id="edLbl">—</span></div>
+    <button class="icon-btn" id="searchMobBtn" title="検索" style="display:none" onclick="openMobileSearch()">🔍</button>
     <button class="icon-btn" id="updateBtn" title="記事を今すぐ更新">🔄</button>
     <button class="icon-btn" id="wbBtn" title="マイ単語帳">📖<span class="badge" id="wbBadge"></span></button>
     <button class="icon-btn" id="favBtn" title="お気に入り">☆<span class="badge" id="favBadge">0</span></button>
@@ -372,19 +507,48 @@ body{background:var(--bg);color:var(--text-primary)}
     <button class="theme-toggle" id="tt"><span class="ti moon">🌙</span><span class="ti sun">☀️</span></button>
   </div>
 </header>
+<!-- Mobile search overlay -->
+<div class="msovl" id="msovl">
+  <div class="ms-bar">
+    <input class="ms-inp" id="ms-inp" type="search" placeholder="記事を検索..." autocomplete="off" autocorrect="off">
+    <button class="ms-cancel" id="ms-cancel">キャンセル</button>
+  </div>
+  <div class="ms-body" id="ms-body"></div>
+</div>
+<!-- Bottom navigation (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bn-item active" id="bn-home" onclick="window.scrollTo({top:0,behavior:'smooth'});setBnActive('bn-home')">
+    <span class="bn-icon">🏠</span>ホーム
+  </button>
+  <button class="bn-item" id="bn-search" onclick="openMobileSearch()">
+    <span class="bn-icon">🔍</span>検索
+  </button>
+  <button class="bn-item" id="bn-fav" onclick="openFP();setBnActive('bn-fav')">
+    <span class="bn-icon">⭐</span>お気に入り<span class="bn-badge" id="bnFavBadge"></span>
+  </button>
+  <button class="bn-item" id="bn-word" onclick="openWB();setBnActive('bn-word')">
+    <span class="bn-icon">📖</span>単語帳<span class="bn-badge" id="bnWordBadge"></span>
+  </button>
+  <button class="bn-item" id="bn-user" onclick="openAuthModal();setBnActive('bn-user')">
+    <span class="bn-icon" id="bnUserIcon">👤</span><span id="bnUserLbl">ログイン</span>
+  </button>
+</nav>
 <div class="fpovl" id="fpovl"></div>
 <div class="fppanel" id="fpp">
+  <div class="drag-handle"></div>
   <div class="fphead"><span class="fptitle">⭐ お気に入り記事</span><button class="fpclose" id="fpc">✕</button></div>
   <div class="fpbody" id="fpb"></div>
 </div>
 <div class="arcovl" id="arcovl"></div>
 <div class="arcpanel" id="arcp">
+  <div class="drag-handle"></div>
   <div class="fphead"><span class="fptitle">📚 記事アーカイブ</span><button class="fpclose" id="arcc">✕</button></div>
   <div class="fpbody" id="arcb"></div>
 </div>
 <!-- Word Bank panel -->
 <div class="wbovl" id="wbovl"></div>
 <div class="wbpanel" id="wbp">
+  <div class="drag-handle"></div>
   <div class="fphead"><span class="fptitle">📖 マイ単語帳</span><button class="fpclose" id="wbc">✕</button></div>
   <div class="wb-stats">
     <div class="wb-stat"><div class="wb-stat-val" id="wb-total">0</div><div class="wb-stat-lbl">保存単語</div></div>
@@ -463,6 +627,11 @@ body{background:var(--bg);color:var(--text-primary)}
   </aside>
   <div class="main-wrap">
     <main class="main">
+      <div class="mob-stats" id="mobStats">
+        <div class="ms-item"><div class="ms-val" id="ms-streak">0</div><div class="ms-lbl">🔥 連続</div></div>
+        <div class="ms-item"><div class="ms-val" id="ms-words">0</div><div class="ms-lbl">📖 単語</div></div>
+        <div class="ms-item"><div class="ms-val" id="ms-acc">—</div><div class="ms-lbl">🎯 正答率</div></div>
+      </div>
       <section class="hero">
         <p class="hero-eye">Science Learning Platform</p>
         <h1 class="hero-title">Explore the <span>frontiers</span> of science</h1>
@@ -492,6 +661,7 @@ body{background:var(--bg);color:var(--text-primary)}
 </div>
 <div class="movl" id="movl" role="dialog" aria-modal="true">
   <div class="mpanel">
+    <div class="drag-handle"></div>
     <img class="mimg" id="mimg" src="" alt="">
     <div class="mcont">
       <div class="mtop">
@@ -862,6 +1032,8 @@ function refreshFavUI(){
   const badge=document.getElementById('favBadge');
   const fb=document.getElementById('favBtn');
   badge.textContent=favs.length;badge.classList.toggle('show',favs.length>0);
+  const bb=document.getElementById('bnFavBadge');
+  if(bb){bb.textContent=favs.length;bb.classList.toggle('show',favs.length>0);}
   const txtNode=Array.from(fb.childNodes).find(n=>n.nodeType===3);
   if(txtNode)txtNode.nodeValue=favs.length?'★':'☆';
   // sidebar
@@ -1075,9 +1247,12 @@ function deleteWord(word){
   if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 function updateWordBadge(){
-  const n=loadWords().length,b=document.getElementById('wbBadge');
-  if(!b)return;
-  b.textContent=n>99?'99+':n;b.classList.toggle('show',n>0);
+  const n=loadWords().length;
+  const b=document.getElementById('wbBadge');
+  if(b){b.textContent=n>99?'99+':n;b.classList.toggle('show',n>0);}
+  const bb=document.getElementById('bnWordBadge');
+  if(bb){bb.textContent=n>99?'99+':n;bb.classList.toggle('show',n>0);}
+  const ms=document.getElementById('ms-words');if(ms)ms.textContent=n;
 }
 function renderWordBank(){
   const words=loadWords();
@@ -1171,11 +1346,11 @@ function updateStreak(){
 /* ── SIDEBAR STATS ── */
 function refreshSidebarStats(){
   const streak=loadStreak(),words=loadWords(),q=loadQStats();
+  const acc=q.total>0?Math.round(q.correct/q.total*100)+'%':'—';
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('sb-streak',streak.count);
-  set('sb-words',words.length);
-  set('sb-qtot',q.total);
-  set('sb-acc',q.total>0?Math.round(q.correct/q.total*100)+'%':'—');
+  set('sb-streak',streak.count);set('sb-words',words.length);
+  set('sb-qtot',q.total);set('sb-acc',acc);
+  set('ms-streak',streak.count);set('ms-words',words.length);set('ms-acc',acc);
 }
 
 /* ── JSONBIN CONFIG ── */
@@ -1288,12 +1463,76 @@ function updateAuthUI(user){
     btn.innerHTML='👤';btn.className='icon-btn';btn.title='ログイン・同期';
     btn.onclick=openAuthModal;
   }
+  // Bottom nav user button
+  const bnIcon=document.getElementById('bnUserIcon');
+  const bnLbl=document.getElementById('bnUserLbl');
+  const bnUser=document.getElementById('bn-user');
+  if(bnIcon)bnIcon.textContent=user?'✅':'👤';
+  if(bnLbl)bnLbl.textContent=user?user.email.split('@')[0]:'ログイン';
+  if(bnUser)bnUser.onclick=user?()=>{if(confirm('ログアウトしますか？'))logout();}:()=>openAuthModal();
 }
 function showJsonbinHelp(){
   alert('JSONBinの設定手順（2分）:\n\n① https://jsonbin.io にアクセス → 無料登録\n② Account → API Keys → Master Key をコピー\n③ 科学情報.html の JSONBIN_KEY に貼り付け\n④ 新しいBinを作成（Contents: {"_v":1}）\n⑤ そのBinのIDをコピー\n⑥ JSONBIN_INDEX_ID に貼り付け\n⑦ GitHub Desktopで Commit → Push\n\n完了！次回からメールアドレスを入力するだけ。');
 }
 document.getElementById('authClose').addEventListener('click',closeAuthModal);
 document.getElementById('authOvl').addEventListener('click',e=>{if(e.target===document.getElementById('authOvl'))closeAuthModal();});
+
+/* ── MOBILE HELPERS ── */
+function setBnActive(id){
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById(id);if(el)el.classList.add('active');
+}
+function openWB(){
+  renderWordBank();
+  document.getElementById('wbovl').classList.add('open');
+  document.getElementById('wbp').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+let mstimer=null;
+function openMobileSearch(){
+  document.getElementById('msovl').classList.add('open');
+  setTimeout(()=>document.getElementById('ms-inp').focus(),80);
+  setBnActive('bn-search');
+}
+function closeMobileSearch(){
+  document.getElementById('msovl').classList.remove('open');
+  document.getElementById('ms-inp').value='';
+  document.getElementById('ms-body').innerHTML='';
+  setBnActive('bn-home');
+}
+(function initMobileSearch(){
+  const inp=document.getElementById('ms-inp');
+  const cancel=document.getElementById('ms-cancel');
+  const body=document.getElementById('ms-body');
+  if(!inp)return;
+  inp.addEventListener('input',()=>{
+    clearTimeout(mstimer);
+    if(!inp.value.trim()){body.innerHTML='';return;}
+    mstimer=setTimeout(()=>{
+      const all=getArcAll();
+      const q=inp.value.trim();
+      const terms=q.toLowerCase().replace(/[「」『』。、？！]/g,' ').split(/\s+/).filter(Boolean);
+      const results=all.filter(a=>{
+        const txt=(a.title+' '+a.excerpt+' '+a.cat).toLowerCase();
+        return terms.some(t=>txt.includes(t));
+      }).slice(0,12);
+      body.innerHTML=results.length
+        ?results.map(a=>`<div class="sr-item" data-id="${a.id}" style="border-bottom:1px solid var(--border);padding:.75rem .5rem;display:flex;gap:10px;cursor:pointer;border-radius:8px">
+            <img class="sr-img" src="${a.img}" alt="" loading="lazy" style="width:52px;height:38px;border-radius:6px;object-fit:cover;flex-shrink:0">
+            <div><div class="sr-title" style="font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:2px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden">${a.title}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${a.cat} · ${a.date}</div></div></div>`).join('')
+        :'<div style="text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:13px">見つかりませんでした</div>';
+      body.querySelectorAll('.sr-item').forEach(el=>{
+        el.addEventListener('click',()=>{
+          const a=all.find(x=>x.id===el.dataset.id);
+          if(a){closeMobileSearch();openModal(a);}
+        });
+      });
+    },400);
+  });
+  inp.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileSearch();});
+  cancel.addEventListener('click',closeMobileSearch);
+})();
 
 /* ── INIT ── */
 (function init(){
