@@ -492,7 +492,7 @@ body{background:var(--bg);color:var(--text-primary)}
   <button class="wp-close" id="wpClose">✕</button>
 </div>
 <header class="header">
-  <div class="logo"><div class="logo-mark"></div><span class="logo-text">Cosmos<span>.</span></span></div>
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="トップへ"><div class="logo-mark"></div><span class="logo-text">Cosmos<span>.</span></span></div>
   <div class="header-center">
     <input class="search-input" id="si" type="text" placeholder="🔍  例:「ゲノム編集」「量子コンピュータ」「惑星」などAI検索...">
     <button class="search-clear" id="sc">✕</button>
@@ -517,11 +517,11 @@ body{background:var(--bg);color:var(--text-primary)}
 </div>
 <!-- Bottom navigation (mobile) -->
 <nav class="bottom-nav" id="bottomNav">
-  <button class="bn-item active" id="bn-home" onclick="window.scrollTo({top:0,behavior:'smooth'});setBnActive('bn-home')">
-    <span class="bn-icon">🏠</span>ホーム
-  </button>
-  <button class="bn-item" id="bn-search" onclick="openMobileSearch()">
+  <button class="bn-item active" id="bn-home" onclick="openMobileSearch()">
     <span class="bn-icon">🔍</span>検索
+  </button>
+  <button class="bn-item" id="bn-arc" onclick="openArc();setBnActive('bn-arc')">
+    <span class="bn-icon">📚</span>アーカイブ
   </button>
   <button class="bn-item" id="bn-fav" onclick="openFP();setBnActive('bn-fav')">
     <span class="bn-icon">⭐</span>お気に入り<span class="bn-badge" id="bnFavBadge"></span>
@@ -1492,7 +1492,7 @@ let mstimer=null;
 function openMobileSearch(){
   document.getElementById('msovl').classList.add('open');
   setTimeout(()=>document.getElementById('ms-inp').focus(),80);
-  setBnActive('bn-search');
+  setBnActive('bn-home');
 }
 function closeMobileSearch(){
   document.getElementById('msovl').classList.remove('open');
