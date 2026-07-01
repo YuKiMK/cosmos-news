@@ -643,6 +643,7 @@ function toggleFav(art){
   if(i>=0)f.splice(i,1);
   else f.unshift({id:art.id,title:art.title,src:art.src,img:art.img,cat:art.cat,date:art.date});
   saveFavs(f);refreshFavUI();
+  if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 
 /* ── EDITION ── */
@@ -1205,12 +1206,28 @@ async function syncFromCloud(){
   if(!JSONBIN_ENABLED||!currentUser?.binId)return;
   try{
     const data=await jbGet(currentUser.binId);
-    if(Array.isArray(data.words))saveWords(data.words);
-    if(Array.isArray(data.favorites))saveFavs(data.favorites);
-    if(data.quiz_stats)saveQStats(data.quiz_stats);
+    // Merge favorites: keep both local and cloud items (union by ID)
+    const localFavs=loadFavs();
+    const cloudFavs=Array.isArray(data.favorites)?data.favorites:[];
+    const mergedFavs=[...cloudFavs];
+    localFavs.forEach(lf=>{if(!mergedFavs.some(cf=>cf.id===lf.id))mergedFavs.push(lf);});
+    saveFavs(mergedFavs);
+    // Merge words: keep both local and cloud items (union by word)
+    const localWords=loadWords();
+    const cloudWords=Array.isArray(data.words)?data.words:[];
+    const mergedWords=[...cloudWords];
+    localWords.forEach(lw=>{if(!mergedWords.some(cw=>cw.word===lw.word))mergedWords.push(lw);});
+    saveWords(mergedWords);
+    // Quiz stats: take the higher cumulative total
+    if(data.quiz_stats){
+      const lqs=loadQStats();
+      saveQStats({total:Math.max(lqs.total,data.quiz_stats.total||0),correct:Math.max(lqs.correct,data.quiz_stats.correct||0)});
+    }
     if(data.streak)saveStreak(data.streak);
     refreshFavUI();updateWordBadge();refreshSidebarStats();
     toast('☁️ データを同期しました');
+    // Push merged result back so cloud stays up to date
+    await syncToCloud();
   }catch(e){console.warn('Sync failed:',e);}
 }
 async function syncToCloud(){
