@@ -348,8 +348,6 @@ body{background:var(--bg);color:var(--text-primary)}
 .vitem:hover .vsave{opacity:1}
 .vitem:hover .vsave:hover{border-color:var(--accent);color:var(--accent)}
 </style>
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="toast" id="toast"></div>
@@ -407,22 +405,20 @@ body{background:var(--bg);color:var(--text-primary)}
   <div class="auth-panel">
     <button class="auth-close" id="authClose">✕</button>
     <div class="auth-logo">Cosmos<span>.</span></div>
-    <div class="auth-sub">メールアドレスを入力するだけでOK。<br>パスワード不要のマジックリンク認証です。</div>
+    <div class="auth-sub">メールアドレスを入力するだけで<br>PC・スマホ間でデータを同期できます</div>
     <div id="authForm">
       <input class="auth-field" type="email" id="authEmail" placeholder="メールアドレス" autocomplete="email">
-      <button class="auth-submit" id="authSubmit" onclick="sendMagicLink()">🔗 マジックリンクを送信</button>
+      <button class="auth-submit" id="authSubmit" onclick="loginWithEmail()">☁️ ログイン・データを同期</button>
       <div class="auth-err" id="authErr"></div>
     </div>
     <div id="authSent" style="display:none;text-align:center;padding:1.25rem 0">
-      <div style="font-size:2.5rem;margin-bottom:.75rem">📧</div>
-      <div style="font-weight:600;color:var(--text-primary);margin-bottom:.5rem">メールを確認してください</div>
-      <div style="font-size:12.5px;color:var(--text-muted);line-height:1.7">マジックリンクをメールで送信しました。<br>リンクをクリックするとログイン完了です。</div>
-      <button onclick="document.getElementById('authSent').style.display='none';document.getElementById('authForm').style.display='block'" style="margin-top:1rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);padding:6px 14px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12px">別のメールで試す</button>
+      <div style="font-size:2.5rem;margin-bottom:.75rem">✅</div>
+      <div style="font-weight:600;color:var(--text-primary);margin-bottom:.5rem">ログイン完了！</div>
+      <div style="font-size:12.5px;color:var(--text-muted);line-height:1.7">学習データを同期しました。<br>自動的に閉じます。</div>
     </div>
     <div class="auth-note">
-      パスワード不要・安全なワンタイムリンク方式<br>
-      データはSupabase（PostgreSQL）に保存されます<br>
-      ⚠️ <a href="#" onclick="showSupabaseHelp();return false">Supabaseの初期設定が必要です</a>
+      メールアドレスがIDになります。パスワード不要。<br>
+      ⚠️ <a href="#" onclick="showJsonbinHelp();return false">JSONBinの初期設定が必要です</a>
     </div>
   </div>
 </div>
@@ -773,7 +769,7 @@ function keepAll(a){
   });
   updateWordBadge();refreshSidebarStats();
   toast(added>0?`💾 ${added}語を単語帳に保存しました`:'すべての用語はすでに保存済みです');
-  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+  if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 function toast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
@@ -1070,12 +1066,12 @@ function addWord(word,articleId,articleTitle){
   w.unshift({word:normalized,articleId:articleId||null,articleTitle:articleTitle||null,savedAt:new Date().toISOString()});
   saveWords(w);updateWordBadge();refreshSidebarStats();
   toast(`💾 「${normalized}」を単語帳に保存しました`);
-  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+  if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 function deleteWord(word){
   saveWords(loadWords().filter(x=>x.word!==word));
   updateWordBadge();refreshSidebarStats();renderWordBank();
-  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+  if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 function updateWordBadge(){
   const n=loadWords().length,b=document.getElementById('wbBadge');
@@ -1158,7 +1154,7 @@ function loadQStats(){try{return JSON.parse(localStorage.getItem('cosmos_qstats'
 function saveQStats(s){try{localStorage.setItem('cosmos_qstats',JSON.stringify(s))}catch{}}
 function recordQuizResult(correct,total){
   const s=loadQStats();s.total+=total;s.correct+=correct;saveQStats(s);refreshSidebarStats();
-  if(SUPABASE_ENABLED&&currentUser)syncToCloud();
+  if(JSONBIN_ENABLED&&currentUser)syncToCloud();
 }
 
 /* ── STREAK ── */
@@ -1181,51 +1177,46 @@ function refreshSidebarStats(){
   set('sb-acc',q.total>0?Math.round(q.correct/q.total*100)+'%':'—');
 }
 
-/* ── SUPABASE CONFIG ── */
-// ↓ Supabaseプロジェクト作成後、ここに設定を入力してください
-// https://supabase.com → Settings → API → Project URL & anon key
-const SUPABASE_URL="";   // 例: https://xxxx.supabase.co
-const SUPABASE_KEY="";   // anon/public キー
-const SUPABASE_ENABLED=!!(SUPABASE_URL&&SUPABASE_KEY);
-let _sb=null,currentUser=null;
-if(SUPABASE_ENABLED){
-  try{
-    _sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-    _sb.auth.onAuthStateChange(async(event,session)=>{
-      currentUser=session?.user||null;
-      updateAuthUI(currentUser);
-      if(currentUser&&(event==='SIGNED_IN'||event==='TOKEN_REFRESHED'))await syncFromCloud();
-    });
-    _sb.auth.getSession().then(({data:{session}})=>{
-      currentUser=session?.user||null;
-      updateAuthUI(currentUser);
-      if(currentUser)syncFromCloud();
-    });
-  }catch(e){console.warn('Supabase init error:',e);}
+/* ── JSONBIN CONFIG ── */
+// ↓ 以下2つを設定してください（showJsonbinHelp()参照）
+const JSONBIN_KEY="";        // jsonbin.io → Account → API Keys → Master Key
+const JSONBIN_INDEX_ID="";   // 最初に作成したインデックスBinのID
+const JSONBIN_ENABLED=!!(JSONBIN_KEY&&JSONBIN_INDEX_ID);
+let currentUser=null;
+
+/* ── JSONBIN HELPERS ── */
+async function jbGet(id){
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}/latest`,{headers:{'X-Master-Key':JSONBIN_KEY}});
+  if(!r.ok)throw new Error('JSONBin read error: '+r.status);
+  return(await r.json()).record;
+}
+async function jbSet(id,data){
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${id}`,{method:'PUT',headers:{'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json'},body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('JSONBin write error: '+r.status);
+}
+async function jbCreate(data){
+  const r=await fetch('https://api.jsonbin.io/v3/b',{method:'POST',headers:{'X-Master-Key':JSONBIN_KEY,'Content-Type':'application/json','X-Bin-Private':'true'},body:JSON.stringify(data)});
+  if(!r.ok)throw new Error('JSONBin create error: '+r.status);
+  return(await r.json()).metadata.id;
 }
 
 /* ── CLOUD SYNC ── */
 async function syncFromCloud(){
-  if(!_sb||!currentUser)return;
+  if(!JSONBIN_ENABLED||!currentUser?.binId)return;
   try{
-    const{data,error}=await _sb.from('user_data').select('*').eq('user_id',currentUser.id).single();
-    if(!error&&data){
-      if(data.words)saveWords(data.words);
-      if(data.favorites)saveFavs(data.favorites);
-      if(data.quiz_stats)saveQStats(data.quiz_stats);
-      if(data.streak)saveStreak(data.streak);
-      refreshFavUI();updateWordBadge();refreshSidebarStats();
-      toast('☁️ データを同期しました');
-    }
-  }catch(e){console.warn('Cloud sync failed:',e);}
+    const data=await jbGet(currentUser.binId);
+    if(Array.isArray(data.words))saveWords(data.words);
+    if(Array.isArray(data.favorites))saveFavs(data.favorites);
+    if(data.quiz_stats)saveQStats(data.quiz_stats);
+    if(data.streak)saveStreak(data.streak);
+    refreshFavUI();updateWordBadge();refreshSidebarStats();
+    toast('☁️ データを同期しました');
+  }catch(e){console.warn('Sync failed:',e);}
 }
 async function syncToCloud(){
-  if(!_sb||!currentUser)return;
+  if(!JSONBIN_ENABLED||!currentUser?.binId)return;
   try{
-    await _sb.from('user_data').upsert({
-      user_id:currentUser.id,words:loadWords(),favorites:loadFavs(),
-      quiz_stats:loadQStats(),streak:loadStreak(),updated_at:new Date().toISOString()
-    },{onConflict:'user_id'});
+    await jbSet(currentUser.binId,{words:loadWords(),favorites:loadFavs(),quiz_stats:loadQStats(),streak:loadStreak(),updated_at:new Date().toISOString()});
   }catch(e){console.warn('Cloud save failed:',e);}
 }
 
@@ -1238,30 +1229,37 @@ function openAuthModal(){
   setTimeout(()=>document.getElementById('authEmail').focus(),100);
 }
 function closeAuthModal(){document.getElementById('authOvl').classList.remove('open');}
-async function sendMagicLink(){
-  const email=document.getElementById('authEmail').value.trim();
+async function loginWithEmail(){
+  const email=(document.getElementById('authEmail').value||'').trim();
   const errEl=document.getElementById('authErr');
   errEl.textContent='';
-  if(!SUPABASE_ENABLED){errEl.textContent='⚠️ Supabase が未設定です。SUPABASE_URL と SUPABASE_KEY を設定してください。';return;}
+  if(!JSONBIN_ENABLED){errEl.textContent='⚠️ JSONBinが未設定です。JSONBIN_KEYとJSONBIN_INDEX_IDを設定してください。';return;}
   if(!email||!email.includes('@')){errEl.textContent='正しいメールアドレスを入力してください';return;}
   const btn=document.getElementById('authSubmit');
-  btn.disabled=true;btn.textContent='送信中...';
+  btn.disabled=true;btn.textContent='同期中...';
   try{
-    const redirectTo=window.location.protocol==='file:'
-      ?'http://localhost:8080'
-      :window.location.href.split('?')[0];
-    const{error}=await _sb.auth.signInWithOtp({email,options:{emailRedirectTo:redirectTo}});
-    if(error)throw error;
+    const index=await jbGet(JSONBIN_INDEX_ID);
+    let binId=index[email];
+    if(!binId){
+      binId=await jbCreate({words:[],favorites:[],quiz_stats:{total:0,correct:0},streak:{count:0,last:''},created:new Date().toISOString()});
+      index[email]=binId;
+      await jbSet(JSONBIN_INDEX_ID,index);
+    }
+    currentUser={email,binId};
+    localStorage.setItem('cosmos_user',JSON.stringify(currentUser));
+    await syncFromCloud();
+    updateAuthUI(currentUser);
     document.getElementById('authForm').style.display='none';
     document.getElementById('authSent').style.display='block';
+    setTimeout(closeAuthModal,2200);
   }catch(e){
-    errEl.textContent=e.message||'エラーが発生しました';
-    btn.disabled=false;btn.textContent='🔗 マジックリンクを送信';
+    errEl.textContent='同期に失敗しました: '+(e.message||'エラー');
+    btn.disabled=false;btn.textContent='☁️ ログイン・データを同期';
   }
 }
-async function logout(){
-  if(!_sb)return;
-  await _sb.auth.signOut();currentUser=null;updateAuthUI(null);toast('ログアウトしました');
+function logout(){
+  currentUser=null;localStorage.removeItem('cosmos_user');
+  updateAuthUI(null);toast('ログアウトしました');
 }
 function updateAuthUI(user){
   const btn=document.getElementById('authBtn');if(!btn)return;
@@ -1270,12 +1268,12 @@ function updateAuthUI(user){
     btn.className='user-chip';btn.title=`${user.email} (タップでログアウト)`;
     btn.onclick=()=>{if(confirm('ログアウトしますか？'))logout();};
   }else{
-    btn.innerHTML='👤';btn.className='icon-btn';btn.title='ログイン・新規登録';
+    btn.innerHTML='👤';btn.className='icon-btn';btn.title='ログイン・同期';
     btn.onclick=openAuthModal;
   }
 }
-function showSupabaseHelp(){
-  alert('Supabaseの設定手順（5分）:\n\n① https://supabase.com → 「Start your project」\n② 新規プロジェクトを作成\n③ Settings → API → Project URL と anon key をコピー\n④ 科学情報.html内の SUPABASE_URL と SUPABASE_KEY に貼り付け\n⑤ SQL Editor で以下を実行:\n\ncreate table user_data (\n  user_id uuid references auth.users primary key,\n  words jsonb default \'[]\'::jsonb,\n  favorites jsonb default \'[]\'::jsonb,\n  quiz_stats jsonb default \'{}\'::jsonb,\n  streak jsonb default \'{}\'::jsonb,\n  updated_at timestamptz default now()\n);\nalter table user_data enable row level security;\ncreate policy "own data" on user_data\n  for all using (auth.uid() = user_id);\n\n⑥ Authentication → URL Configuration → Redirect URLs にサイトのURLを追加');
+function showJsonbinHelp(){
+  alert('JSONBinの設定手順（2分）:\n\n① https://jsonbin.io にアクセス → 無料登録\n② Account → API Keys → Master Key をコピー\n③ 科学情報.html の JSONBIN_KEY に貼り付け\n④ 新しいBinを作成（Contents: {"_v":1}）\n⑤ そのBinのIDをコピー\n⑥ JSONBIN_INDEX_ID に貼り付け\n⑦ GitHub Desktopで Commit → Push\n\n完了！次回からメールアドレスを入力するだけ。');
 }
 document.getElementById('authClose').addEventListener('click',closeAuthModal);
 document.getElementById('authOvl').addEventListener('click',e=>{if(e.target===document.getElementById('authOvl'))closeAuthModal();});
@@ -1287,7 +1285,8 @@ document.getElementById('authOvl').addEventListener('click',e=>{if(e.target===do
   addToArc(ED.arts,ED.key);
   renderTabs();renderGrid();refreshFavUI();
   updateWordBadge();refreshSidebarStats();
-  updateAuthUI(null);
+  try{const saved=localStorage.getItem('cosmos_user');if(saved){currentUser=JSON.parse(saved);syncFromCloud();}}catch{}
+  updateAuthUI(currentUser);
   setInterval(()=>{
     const newED=edInfo();
     if(newED.key!==ED.key){addToArc(newED.arts,newED.key);}
